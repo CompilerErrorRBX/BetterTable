@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="./betterTable/styles/betterTable.css" rel="stylesheet" />
+    <link href="site.css" rel="stylesheet" />
+    <script src="./betterTable/src/betterTable.js"></script>
+  </head>
+  <body>
+    <script>
+      const rows = [];
+      for (let i = 0; i < 20000; i++) {
+        rows.push({ email: 'stephenlkmartin@gmail.com', fname: 'Stephen' + i, lname: 'Martin' + i })
+      }
+
+      const tick = Date.now();
+      const bt = new BetterTable.Table({
+        columns: { email: 'Email', fname: 'First Name', lname: 'Last Name' },
+        rows
+      });
+      console.log(Date.now() - tick);
+    </script>
+    <!-- <div class="betterTable">
+      <div class="bt-toolbar">
+        <strong>BetterTable</strong>
+        <div class="bt-spacer"></div>
+        <input class="bt-filter" placeholder="Filter" />
+      </div>
+      <div class="bt-main-container bt-header-floated bt-lazy">
+        <div class="bt-container">
+          <div class="bt-progress">
+            <div class="bt-progress-bar"></div>
+          </div>
+          <div class="bt-table">
+            <div class="bt-columns">
+              <div class="bt-column" style="flex: 1;"></div>
+              <div class="bt-column" style="width: 160px"></div>
+              <div class="bt-column" style="width: 160px"></div>
+            </div>
+            <div class="bt-header">
+              <div class="bt-header-container">
+                <div class="bt-cell" style="flex: 1;">Email</div>
+                <div class="bt-cell" style="width: 160px">First Name</div>
+                <div class="bt-cell" style="width: 160px">Last Name</div>
+              </div>
+            </div>
+            <div class="bt-body">
+              <div class="bt-row">
+                <div class="bt-cell">stephenlkmartin@gmail.com</div>
+                <div class="bt-cell">Stephen</div>
+                <div class="bt-cell">Martin</div>
+              </div>
+              <div class="bt-row">
+                <div class="bt-cell">dlmartin@gmail.com</div>
+                <div class="bt-cell">Daniel</div>
+                <div class="bt-cell">Martin</div>
+              </div>
+              <div class="bt-row">
+                <div class="bt-cell">tonymu@gmail.com</div>
+                <div class="bt-cell">Tony</div>
+                <div class="bt-cell">Mu</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </body>
+</html>

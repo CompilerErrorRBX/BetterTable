@@ -1,0 +1,124 @@
+/* Table container */
+.betterTable {
+  background-color: rgba(0,0,0,0.01);
+  display: block;
+  height: auto;
+}
+.betterTable .bt-main-container {
+  position: relative;
+  width: 100%;
+}
+
+.betterTable .bt-main-container.bt-header-floated {
+  margin-top: 48px;
+}
+
+/* Container which handles scrolling */
+.betterTable .bt-container {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, .08);
+  box-sizing: border-box;
+  height: auto;
+  max-height: 70vh;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.betterTable .bt-table {
+  display: table;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.betterTable .bt-columns {
+  display: table-column-group;
+}
+
+.betterTable .bt-toolbar {
+  display: flex;
+  background-color: #eee;
+  height: 48px;
+  align-items: center;
+  padding: 4px 8px;
+  border-bottom: 1px solid #ddd
+}
+
+.betterTable .bt-toolbar .bt-filter {
+  padding: 0 4px;
+  height: 32px;
+}
+
+.betterTable .bt-spacer {
+  flex: 1 1 auto;
+}
+
+.betterTable .bt-progress {
+  height: 0;
+  width: 100%;
+  transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+  background-color: rgba(33, 150, 243, 0.3);
+  opacity: 0;
+}
+
+.betterTable .bt-progress.active {
+  height: 4px;
+  opacity: 1;
+}
+
+.betterTable .bt-progress .bt-progress-bar {
+  transition: inherit;
+  width: 0;
+  height: inherit;
+  background-color: rgba(33, 150, 243, 1)
+}
+
+.betterTable .bt-header {
+  background-color: #eee;
+  box-sizing: border-box;
+  display: table-header-group;
+  height: 48px;
+  position: relative;
+}
+
+.betterTable .bt-header-floated .bt-header {
+  border-bottom: 1px solid #eee;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: -48px;
+  z-index: 1;
+}
+
+.betterTable .bt-body {
+  display: table-row-group;
+  overflow-y: auto;
+  width: 100%;
+}
+
+.betterTable .bt-body .bt-row {
+  display: table-row;
+  height: 32px;
+  width: 100%;
+}
+
+.betterTable .bt-columns .bt-column {
+  display: table-column;
+}
+
+.betterTable .bt-header .bt-header-container {
+  display: flex;
+  height: 47px;
+  width: 100%;
+}
+
+.betterTable .bt-cell {
+  align-self: center;
+  box-sizing: border-box;
+  display: table-cell;
+  justify-self: center;
+  padding: 0 8px;
+  text-align: left;
+  vertical-align: middle;
+  width: 100%;
+}
