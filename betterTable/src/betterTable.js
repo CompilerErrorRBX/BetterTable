@@ -321,15 +321,15 @@ const BetterTable = (function() {
       this.__catch = new Event();
       this.__finally = new Event();
 
-      callback(this.resolve.bind(this), this.reject.bind(this));
+      callback(this.__resolve.bind(this), this.__reject.bind(this));
     }
 
     Promise.prototype = {
-      resolve: function (args) {
+      __resolve: function (args) {
         this.__then.dispatch(args);
         this.__finally.dispatch(args);
       },
-      reject: function (args) {
+      __reject: function (args) {
         this.__catch.dispatch(args);
         this.__finally.dispatch(args);
       },
