@@ -35,10 +35,8 @@
 .Trashes
 ehthumbs.db
 
-### VisualStudioCode ###
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-.history
+/.project
+.DS_Store
+.idea
+.project
+.vscode
