@@ -17,7 +17,27 @@
         columns: { email: 'Email', fname: 'First Name', lname: 'Last Name' },
         rows
       });
-      console.log(Date.now() - tick);
+      console.log('BetterSelect initialized in', (Date.now() - tick) + 'ms');
+
+      const $filter = document.createElement('input');
+      $filter.className = 'bt-filter';
+      $filter.placeholder = 'Filter'
+
+      bt.$toolbarEl.appendChild($filter);
+
+      let timeout = null;
+
+      $filter.oninput = function() {
+        if (timeout) {
+          clearTimeout(timeout);
+        }
+
+        timeout = setTimeout(function() {
+          bt.filter = $filter.value
+        }, 100);
+      };
+
+      console.log(bt.filter = 'firstName188')
     </script>
     <!-- <div class="betterTable">
       <div class="bt-toolbar">

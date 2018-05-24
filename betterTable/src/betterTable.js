@@ -8,7 +8,7 @@ const BetterTable = (function() {
         rows: [],                 // An array of object key-value pairs representing rows of data. [{ email: 'stephenlmartin@gmail.com', fname: 'Stephen', lname: 'Martin' }]
         appendTo: null,           // The element the table should be appended to. Defaults to body.
         lazy: true,               // Rows will be lazy loaded in as the user scrolls to them.
-        maxDisplayRows: 100,      // The maximum number of rows to display at a time. Requires lazy.
+        maxDisplayRows: 50,      // The maximum number of rows to display at a time. Requires lazy.
         rowHeight: 32,            // TODO: Make this adjust row size accordingly.
         toolbar: true,            // Toggles the toolbar on the betterTable.
         // TODO: Handle max display columns as well
@@ -22,7 +22,9 @@ const BetterTable = (function() {
       this.__columnData = this.settings.columns;
       this.__columnsOrdered = [];
       this.__filter = '';
-      this.__filteredRows = [];
+      this.__filteredRows = null;
+      this.__proccessing = false;
+      this.__progress = 0;
 
       // Events
       this.__onRender = new Event();
@@ -48,6 +50,12 @@ const BetterTable = (function() {
 
         const $btContainerEl = document.createElement('div');
         $btContainerEl.className = 'bt-container';
+        
+        const $btProgressEl = document.createElement('div');
+        $btProgressEl.className = 'bt-progress';
+
+        const $btProgressBarEl = document.createElement('div');
+        $btProgressBarEl.className = 'bt-progress-bar';
 
         const $btTable = document.createElement('div');
         $btTable.className = 'bt-table';
@@ -67,6 +75,8 @@ const BetterTable = (function() {
         // betterTable
         // -> bt-toolbar
         // -> bt-main-container bt-header-floated
+        //    -> bt-progress
+        //      -> bt-progress-bar
         //    -> bt-container
         //       -> bt-table
         //          -> bt-columns
@@ -78,7 +88,9 @@ const BetterTable = (function() {
         $btTable.appendChild($btColumns);
         $btTable.appendChild($btHeader);
         $btTable.appendChild($btBody);
+        $btProgressEl.appendChild($btProgressBarEl);
         $btContainerEl.appendChild($btTable);
+        $btMainContainerEl.appendChild($btProgressEl);
         $btMainContainerEl.appendChild($btContainerEl);
 
         if (this.settings.toolbar) {
@@ -86,6 +98,8 @@ const BetterTable = (function() {
           $btToolbar.className = 'bt-toolbar';
 
           $betterTableEl.appendChild($btToolbar);
+
+          this.$toolbarEl = $btToolbar;
         }
 
         $betterTableEl.appendChild($btMainContainerEl);
@@ -98,6 +112,8 @@ const BetterTable = (function() {
 
         this.$el = $betterTableEl;
         this.$bodyEl = $btTable;
+        this.$progressEl = $btProgressEl;
+        this.$progressBarEl = $btProgressBarEl;
         this.$containerEl = $btContainerEl;
         this.$columnsContainer = $btColumns;
         this.$headerContainer = $btHeaderContainer;
@@ -129,27 +145,34 @@ const BetterTable = (function() {
       },
 
       __renderRows: function() {
-        const absoluteHeight = this.settings.rowHeight * this.rowData.length;
+        const dataLength = this.__filteredRows ? this.__filteredRows.length : this.rowData.length;
+        const absoluteHeight = this.settings.rowHeight * dataLength;
         const containerHeight = this.$containerEl.clientHeight;
 
-        const scroll = Math.min(this.$containerEl.scrollTop, absoluteHeight - containerHeight);
+        const scroll = Math.max(Math.min(this.$containerEl.scrollTop, absoluteHeight - containerHeight), 0);
 
         const scrollRowIndex = Math.floor(scroll / this.settings.rowHeight);
-        const rowRange = Math.min(scrollRowIndex + this.settings.maxDisplayRows, this.rowData.length);
+        const rowRange = Math.min(scrollRowIndex + this.settings.maxDisplayRows, dataLength);
 
         const offset = Math.min(Math.max(scrollRowIndex - Math.floor(this.settings.maxDisplayRows / 2), 0), Math.floor(this.settings.maxDisplayRows / 2));
         const scrollOffset = scroll - (offset * this.settings.rowHeight);
 
         this.$bodyEl.style.paddingTop = (Math.floor(scrollOffset / this.settings.rowHeight) * this.settings.rowHeight) + 'px';
-        this.$bodyEl.style.paddingBottom = ((absoluteHeight - containerHeight) - scroll) + 'px';
+        this.$bodyEl.style.paddingBottom = Math.max((absoluteHeight - containerHeight) - scroll, 0) + 'px';
         
         const $rowContainer = document.createDocumentFragment();
         for (let i = scrollRowIndex - offset; i < rowRange; i++) {
-          const row = this.rows[i] || this.__processRow(i);
+          let index = i;
+          
+          if (this.__filteredRows) {
+            index = this.__filteredRows[i].index;
+          }
+          
+          const row = this.rows[index] || this.__processRow(index);
           row.__render();
           $rowContainer.appendChild(row.$el);
         }
-        this.$rowsContainer.innerHTML = ''; // TODO: Find a more efficient way to clear and redraw.
+        this.$rowsContainer.innerHTML = '';
         this.$rowsContainer.appendChild($rowContainer);
       },
 
@@ -167,7 +190,7 @@ const BetterTable = (function() {
       },
 
       __processRow: function (index) {
-        const row = new Row(this);
+        const row = new Row(this, index);
         const rowData = this.rowData[index];
 
         Object.keys(this.columnData).map(function (columnData) {
@@ -199,13 +222,56 @@ const BetterTable = (function() {
       set columnData(data) {
         this.__columnData = data;
       },
+      get processing() {
+        return this.__proccessing;
+      },
+      set processing(boolean) {
+        this.__proccessing = boolean;
+        if (boolean === true) {
+          this.$progressEl.classList.add('active');
+        } else {
+          this.$progressEl.classList.remove('active');
+        }
+      },
+      get progress() {
+        return this.__progress;
+      },
+      set progress(percentage) {
+        this.__progress = percentage;
+        this.$progressBarEl.style.width = percentage + '%';
+      },
       get filter() {
         return this.__filter;
       },
-      set filter(filter) {
-        if (filter === '') {
-          this.__filteredRows = this.rows;
+      set filter(filterString) {
+        if (filterString === '') {
+          this.__filteredRows = null;
+          return;
         }
+
+        this.progress = 0;
+        this.processing = true;
+
+        const filterStringLower = filterString.toLowerCase();
+
+        const tick = Date.now();
+        this.__filteredRows = this.rowData.reduce(function (rows, row, index) {
+          const cells = Object.keys(row);
+          for (let i = 0; i < cells.length; i++) {
+            if (row[cells[i]].toLowerCase().indexOf(filterStringLower) > -1) {
+              rows.push({ row, index });
+              break;
+            }
+          }
+          
+          return rows;
+        }.bind(this), []);
+        console.log('Filtering', this.rowData.length, 'rows took:', (Date.now() - tick) + 'ms');
+
+        this.__renderRows();
+
+        this.progress = 100;
+        this.processing = false;
       },
     };
 
@@ -252,9 +318,10 @@ const BetterTable = (function() {
   })();
 
   const Row = (function btRow() {
-    function Row(table) {
+    function Row(table, index) {
       this.table = table;
       this.cells = {};
+      this.index = index;
 
       this.onCellAdd = new Event();
       this.onCellRemove = new Event();
@@ -279,16 +346,6 @@ const BetterTable = (function() {
 
           this.$el.appendChild($container);
         }
-      },
-      __filter: function(filter) {
-        Object.keys(this.cells).filter(function(cell) {
-          const value = this.cells[cell].value;
-          if (value.indexOf(filter) > -1) {
-            return true;
-          }
-        }.bind(this));
-
-        return false;
       },
     };
 
@@ -321,18 +378,19 @@ const BetterTable = (function() {
       this.__catch = new Event();
       this.__finally = new Event();
 
-      callback(this.__resolve.bind(this), this.__reject.bind(this));
+      function resolve(args) {
+        this.__then.dispatch(args);
+        this.__finally.dispatch(args);
+      }
+      function reject(args) {
+        this.__catch.dispatch(args);
+        this.__finally.dispatch(args);
+      }
+
+      callback(resolve.bind(this), reject.bind(this));
     }
 
     Promise.prototype = {
-      __resolve: function (args) {
-        this.__then.dispatch(args);
-        this.__finally.dispatch(args);
-      },
-      __reject: function (args) {
-        this.__catch.dispatch(args);
-        this.__finally.dispatch(args);
-      },
       then: function (action) { // When the promise completes
         this.__then.connect(action);
       },

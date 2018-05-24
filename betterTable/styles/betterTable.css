@@ -56,7 +56,7 @@
 .betterTable .bt-progress {
   height: 0;
   width: 100%;
-  transition: all 0.2s cubic-bezier(0.19, 1, 0.22, 1);
+  transition: height 0.2s cubic-bezier(0.19, 1, 0.22, 1);
   background-color: rgba(33, 150, 243, 0.3);
   opacity: 0;
 }
@@ -67,7 +67,7 @@
 }
 
 .betterTable .bt-progress .bt-progress-bar {
-  transition: inherit;
+  transition: width 0.2s cubic-bezier(0.19, 1, 0.22, 1);
   width: 0;
   height: inherit;
   background-color: rgba(33, 150, 243, 1)
