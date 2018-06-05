@@ -21,8 +21,8 @@
   box-sizing: border-box;
   height: auto;
   max-height: 70vh;
-  overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-x: auto;
+  overflow-y: auto;
 }
 
 .betterTable .bt-table {
@@ -88,6 +88,7 @@
   right: 0;
   top: -48px;
   z-index: 1;
+  overflow: hidden;
 }
 
 .betterTable .bt-body {
@@ -102,11 +103,16 @@
   width: 100%;
 }
 
+.betterTable .bt-body .bt-row:hover {
+  background-color: #f7f7f7;
+}
+
 .betterTable .bt-columns .bt-column {
   display: table-column;
 }
 
 .betterTable .bt-header .bt-header-container {
+  position: absolute;
   display: flex;
   height: 47px;
   width: 100%;
@@ -121,4 +127,43 @@
   text-align: left;
   vertical-align: middle;
   width: 100%;
+}
+
+.betterTable .bt-header .bt-header-cell {
+  align-self: center;
+  box-sizing: border-box;
+  display: flex;
+  justify-self: center;
+  align-items: center;
+  padding: 0 8px;
+  text-align: left;
+  vertical-align: middle;
+
+  line-height: 32px;
+  height: 100%;
+  width: 100%;
+}
+
+.betterTable .bt-header .bt-header-cell .bt-header-body {
+  flex: 1 1 auto;
+}
+
+.betterTable .bt-header .bt-header-cell .bt-column-sort {
+  text-align: center;
+  font-size: 24px;
+  line-height: inherit;
+  width: 32px;
+  height: 32px;
+}
+
+.bt-column-sort.none:before {
+  content: '';
+}
+
+.bt-column-sort.asc:before {
+  content: '\2227';
+}
+
+.bt-column-sort.desc:before {
+  content: "\2228";
 }

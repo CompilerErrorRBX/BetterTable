@@ -4,13 +4,14 @@ const BetterTable = (function() {
   const Table = (function btTable() {
     function Table(opts) {
       const defaults = {
-        columns: {},              // An object representing columns. { email: 'Email', fname: 'First name', lname: 'Last name' }
+        columns: {},              // An object representing columns. { email: { name: 'Email', props: {} }, fname: { name: 'Email', props: {} }, lname: { name: 'Email', props: {} } }
         rows: [],                 // An array of object key-value pairs representing rows of data. [{ email: 'stephenlmartin@gmail.com', fname: 'Stephen', lname: 'Martin' }]
         appendTo: null,           // The element the table should be appended to. Defaults to body.
         lazy: true,               // Rows will be lazy loaded in as the user scrolls to them.
-        maxDisplayRows: 50,      // The maximum number of rows to display at a time. Requires lazy.
+        maxDisplayRows: 50,       // The maximum number of rows to display at a time. Requires lazy.
         rowHeight: 32,            // TODO: Make this adjust row size accordingly.
         toolbar: true,            // Toggles the toolbar on the betterTable.
+        columnsSortable: true,    // Whether the columns can be sorted or not.
         // TODO: Handle max display columns as well
       };
 
@@ -27,10 +28,19 @@ const BetterTable = (function() {
       this.__progress = 0;
 
       // Events
+      this.onCellClick = new Event(); // When any cell is clicked. Returns the Cell clicked
+      this.onCellDoubleClick = new Event(); // When any cell is double-clicked
+      this.onColumnClick = new Event(); // When the header of a column is clicked. Returns the Cell clicked
+      this.onColumnDoubleClick = new Event(); // When the header of a column is double-clicked
+
       this.__onRender = new Event();
 
       // Elements
       this.$el = null;
+      this.$bodyEl = null;
+      this.$progressEl = null;
+      this.$progressBarEl = null;
+      this.$containerEl = null;
       this.$columnsContainer = null;
       this.$headerContainer = null;
       this.$rowsContainer = null;
@@ -116,11 +126,13 @@ const BetterTable = (function() {
         this.$progressBarEl = $btProgressBarEl;
         this.$containerEl = $btContainerEl;
         this.$columnsContainer = $btColumns;
+        this.$headerEl = $btHeader;
         this.$headerContainer = $btHeaderContainer;
         this.$rowsContainer = $btBody;
 
         this.$containerEl.onscroll = (function (e) {
           this.__renderRows();
+          this.$headerContainer.style.right = this.$containerEl.scrollLeft + 'px';
         }.bind(this));
 
         this.__onRender.dispatch();
@@ -180,8 +192,8 @@ const BetterTable = (function() {
         const data = this.columnData;
         const columns = {};
         Object.keys(data).forEach(function(column) {
-          const name = data[column];
-          columns[column] = new Column(name);
+          const columnData = data[column];
+          columns[column] = new Column(this, columnData.name, columnData.props);
           this.__columnsOrdered.push(column);
         }.bind(this));
 
@@ -215,12 +227,11 @@ const BetterTable = (function() {
       },
       set rowData(data) {
         this.__rowData = data;
+        this.rows = [];
+        this.__renderRows();
       },
       get columnData() {
         return this.__columnData;
-      },
-      set columnData(data) {
-        this.__columnData = data;
       },
       get processing() {
         return this.__proccessing;
@@ -279,15 +290,22 @@ const BetterTable = (function() {
   })();
 
   const Column = (function btColumn() {
-    function Column(name, opts) {
+    function Column(table, name, opts) {
       const defaults = {
         style: '',
+        cellStyle: '',
       };
 
       this.settings = extend(defaults, opts);
 
+      this.table = table;
       this.name = name;
       this.cells = [];
+
+      this.__sort = 'none';
+
+      this.onClick = new Event();
+      this.onDoubleClick = new Event();
 
       this.$el = null;
       this.$headerEl = null;
@@ -302,16 +320,61 @@ const BetterTable = (function() {
         $columnEl.style = this.settings.style;
 
         const $headerEl = document.createElement('div');
-        $headerEl.className = 'bt-cell';
+        $headerEl.className = 'bt-header-cell';
         $headerEl.style = this.settings.style;
-        $headerEl.innerHTML = this.name;
+
+        const $body = document.createElement('span');
+        $body.className = 'bt-header-body';
+        $body.innerHTML = this.name;
+
+        const $sortEl = document.createElement('div');
+        $sortEl.className = 'bt-column-sort none';
+
+        $headerEl.appendChild($body);
+        $headerEl.appendChild($sortEl);
+
+        $headerEl.onclick = (function () {
+          this.onClick.dispatch(this);
+          this.table.onColumnClick.dispatch(this);
+        }).bind(this);
+
+        $headerEl.ondblclick = (function () {
+          this.onDoubleClick.dispatch(this);
+          this.table.onColumnDoubleClick.dispatch(this);
+        }).bind(this);
 
         this.$el = $columnEl;
+        this.$sortEl = $sortEl;
         this.$headerEl = $headerEl;
       },
       __render: function() {
 
       },
+      toggleSort: function() {
+        switch(this.__sort) {
+          case 'none':
+            this.sort = 'asc';
+            break;
+          case 'asc':
+            this.sort = 'desc';
+            break;
+          case 'desc':
+            this.sort = 'none';
+        }
+      },
+      get sort() {
+        return this.__sort;
+      },
+      set sort(value) {
+        const val = value.toLowerCase();
+        const allowed = ['asc', 'desc', 'none'];
+        if (allowed.indexOf(val) === -1) {
+          console.warn('BetterTable columns can only be sorted as ' + allowed.toString());
+          return;
+        }
+        this.__sort = val;
+        this.$sortEl.className = 'bt-column-sort ' + val;
+      }
     };
 
     return Column;
@@ -355,6 +418,11 @@ const BetterTable = (function() {
   const Cell = (function btCell() {
     function Cell(row, column, value) {
       this.value = value;
+      this.column = column;
+      this.row = row;
+
+      this.onClick = new Event();
+      this.onDoubleClick = new Event();
 
       this.$el = null;
     }
@@ -364,6 +432,17 @@ const BetterTable = (function() {
         const $cellEl = document.createElement('div');
         $cellEl.className = 'bt-cell';
         $cellEl.innerHTML = this.value;
+        $cellEl.style = this.column.settings.cellStyle;
+
+        $cellEl.onclick = (function() {
+          this.onClick.dispatch(this);
+          this.row.table.onCellClick.dispatch(this);
+        }).bind(this);
+      
+        $cellEl.ondblclick = (function () {
+          this.onDoubleClick.dispatch(this);
+          this.row.table.onCellDoubleClick.dispatch(this);
+        }).bind(this);
 
         this.$el = $cellEl;
       },

@@ -8,13 +8,31 @@
   <body>
     <script>
       const rows = [];
+      const rows2 = [];
       for (let i = 0; i < 20000; i++) {
-        rows.push({ email: 'someemail@email.com', fname: 'FirstName' + i, lname: 'LastName' + i })
+        rows.push({
+          email: 'someemail@email.com',
+          fname: 'FirstName' + i,
+          lname: 'LastName' + i,
+          username: 'Username' + i,
+        });
+
+        rows2.push({
+          email: 'someOtherEmail@email.com',
+          fname: 'NotFirstName' + i,
+          lname: 'NotLastName' + i,
+          username: 'NotUsername' + i,
+        });
       }
 
       const tick = Date.now();
       const bt = new BetterTable.Table({
-        columns: { email: 'Email', fname: 'First Name', lname: 'Last Name' },
+        columns: {
+          email: { name: 'Email', props: { style: 'min-width: 500px; width: 500px;' } },
+          fname: { name: 'First Name', props: { style: 'min-width: 500px; width: 500px;' } },
+          lname: { name: 'Last Name', props: { style: 'min-width: 500px; width: 500px;' } },
+          username: { name: 'Username', props: { style: 'min-width: 500px; width: 500px;' } },
+        },
         rows
       });
       console.log('BetterSelect initialized in', (Date.now() - tick) + 'ms');
@@ -36,6 +54,19 @@
           bt.filter = $filter.value
         }, 100);
       };
+
+      bt.onCellDoubleClick.connect(function(Cell) {
+        console.log(Cell);
+      });
+
+      bt.onColumnClick.connect(function (Column) {
+        Column.toggleSort();
+      });
+
+      setTimeout(function() {
+        console.log('Rows changed');
+        bt.rowData = rows2;
+      }, 5000);
     </script>
     <!-- <div class="betterTable">
       <div class="bt-toolbar">
