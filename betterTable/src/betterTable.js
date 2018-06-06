@@ -7,11 +7,11 @@ const BetterTable = (function() {
         columns: {},              // An object representing columns. { email: { name: 'Email', props: {} }, fname: { name: 'Email', props: {} }, lname: { name: 'Email', props: {} } }
         rows: [],                 // An array of object key-value pairs representing rows of data. [{ email: 'stephenlmartin@gmail.com', fname: 'Stephen', lname: 'Martin' }]
         appendTo: null,           // The element the table should be appended to. Defaults to body.
-        lazy: true,               // Rows will be lazy loaded in as the user scrolls to them.
-        maxDisplayRows: 50,       // The maximum number of rows to display at a time. Requires lazy.
+        maxDisplayRows: 50,       // The maximum number of rows to display at a time.
         rowHeight: 32,            // TODO: Make this adjust row size accordingly.
         toolbar: true,            // Toggles the toolbar on the betterTable.
         columnsSortable: true,    // Whether the columns can be sorted or not.
+        columnHeight: 'auto',     // Specify column height in pixels, setting this to auto will make BetterTable attempt to get the actual height.
         // TODO: Handle max display columns as well
       };
 
@@ -38,10 +38,12 @@ const BetterTable = (function() {
       // Elements
       this.$el = null;
       this.$bodyEl = null;
+      this.$mainContainerEl = null;
       this.$progressEl = null;
       this.$progressBarEl = null;
       this.$containerEl = null;
       this.$columnsContainer = null;
+      this.$headerEl = null;
       this.$headerContainer = null;
       this.$rowsContainer = null;
 
@@ -122,6 +124,7 @@ const BetterTable = (function() {
 
         this.$el = $betterTableEl;
         this.$bodyEl = $btTable;
+        this.$mainContainerEl = $btMainContainerEl;
         this.$progressEl = $btProgressEl;
         this.$progressBarEl = $btProgressBarEl;
         this.$containerEl = $btContainerEl;
@@ -139,21 +142,34 @@ const BetterTable = (function() {
       },
 
       __render: function() {
+        this.__renderColumns();
+        this.__renderRows();
+
+        this.__onRender.dispatch();
+      },
+
+      __renderColumns: function() {
         const $columnContainer = document.createDocumentFragment();
         const $headerContainer = document.createDocumentFragment();
-        this.__columnsOrdered.forEach(function(columnName) {
+        this.__columnsOrdered.forEach(function (columnName) {
           const column = this.columns[columnName];
           $columnContainer.appendChild(column.$el);
           $headerContainer.appendChild(column.$headerEl);
+
           column.__render();
         }.bind(this));
+
+        $columnContainer.innerHTML = '';
+        $headerContainer.innerHTML = '';
 
         this.$columnsContainer.appendChild($columnContainer);
         this.$headerContainer.appendChild($headerContainer);
 
-        this.__renderRows();
-
-        this.__onRender.dispatch();
+        if (this.settings.columnHeight === 'auto') {
+          this.__headerHeight = this.$headerContainer.clientHeight + 'px';
+        } else {
+          this.__headerHeight = this.settings.columnHeight;
+        }
       },
 
       __renderRows: function() {
@@ -222,6 +238,11 @@ const BetterTable = (function() {
       },
 
       // Getters and Setters.
+      set __headerHeight(val) {
+        this.$headerEl.style.height = val;
+        this.$headerEl.style.top = '-' + val;
+        this.$mainContainerEl.style.marginTop = val;
+      },
       get rowData() {
         return this.__rowData;
       },
@@ -323,6 +344,9 @@ const BetterTable = (function() {
         $headerEl.className = 'bt-header-cell';
         $headerEl.style = this.settings.style;
 
+        const $headerContent = document.createElement('div');
+        $headerContent.className = 'bt-header-contents';
+
         const $body = document.createElement('span');
         $body.className = 'bt-header-body';
         $body.innerHTML = this.name;
@@ -330,8 +354,9 @@ const BetterTable = (function() {
         const $sortEl = document.createElement('div');
         $sortEl.className = 'bt-column-sort none';
 
-        $headerEl.appendChild($body);
-        $headerEl.appendChild($sortEl);
+        $headerContent.appendChild($body);
+        $headerContent.appendChild($sortEl);
+        $headerEl.appendChild($headerContent);
 
         $headerEl.onclick = (function () {
           this.onClick.dispatch(this);
@@ -433,6 +458,7 @@ const BetterTable = (function() {
         $cellEl.className = 'bt-cell';
         $cellEl.innerHTML = this.value;
         $cellEl.style = this.column.settings.cellStyle;
+        $cellEl.title = $cellEl.innerText;
 
         $cellEl.onclick = (function() {
           this.onClick.dispatch(this);

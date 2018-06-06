@@ -6,6 +6,7 @@
     <script src="./betterTable/src/betterTable.js"></script>
   </head>
   <body>
+    <div id="container" style="max-height: 500px;"></div>
     <script>
       const rows = [];
       const rows2 = [];
@@ -28,12 +29,13 @@
       const tick = Date.now();
       const bt = new BetterTable.Table({
         columns: {
-          email: { name: 'Email', props: { style: 'min-width: 500px; width: 500px;' } },
+          email: { name: 'Email that is a long column name.', props: { style: 'min-width: 150px; width: 150px;'  } },
           fname: { name: 'First Name', props: { style: 'min-width: 500px; width: 500px;' } },
           lname: { name: 'Last Name', props: { style: 'min-width: 500px; width: 500px;' } },
           username: { name: 'Username', props: { style: 'min-width: 500px; width: 500px;' } },
         },
-        rows
+        rows,
+        appendTo: document.getElementById('container'),
       });
       console.log('BetterSelect initialized in', (Date.now() - tick) + 'ms');
 
@@ -81,15 +83,15 @@
           </div>
           <div class="bt-table">
             <div class="bt-columns">
-              <div class="bt-column" style="flex: 1;"></div>
+              <div class="bt-column"></div>
               <div class="bt-column" style="width: 160px"></div>
               <div class="bt-column" style="width: 160px"></div>
             </div>
             <div class="bt-header">
               <div class="bt-header-container">
-                <div class="bt-cell" style="flex: 1;">Email</div>
-                <div class="bt-cell" style="width: 160px">First Name</div>
-                <div class="bt-cell" style="width: 160px">Last Name</div>
+                <div class="bt-header-cell">Email</div>
+                <div class="bt-header-cell" style="min-width: 160px;">First Name</div>
+                <div class="bt-header-cell" style="min-width: 160px;">Last Name</div>
               </div>
             </div>
             <div class="bt-body">

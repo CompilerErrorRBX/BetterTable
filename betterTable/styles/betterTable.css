@@ -1,11 +1,14 @@
 /* Table container */
 .betterTable {
   background-color: rgba(0,0,0,0.01);
-  display: block;
+  display: flex;
+  flex-direction: column;
   height: auto;
+  max-height: inherit;
 }
 .betterTable .bt-main-container {
   position: relative;
+  display: flex;
   width: 100%;
 }
 
@@ -20,7 +23,6 @@
   border: 1px solid rgba(0, 0, 0, .08);
   box-sizing: border-box;
   height: auto;
-  max-height: 70vh;
   overflow-x: auto;
   overflow-y: auto;
 }
@@ -38,7 +40,7 @@
 .betterTable .bt-toolbar {
   display: flex;
   background-color: #eee;
-  height: 48px;
+  min-height: 48px;
   align-items: center;
   padding: 4px 8px;
   border-bottom: 1px solid #ddd
@@ -109,12 +111,13 @@
 
 .betterTable .bt-columns .bt-column {
   display: table-column;
+  min-width: 150px;
+  width: 100%;
 }
 
 .betterTable .bt-header .bt-header-container {
   position: absolute;
   display: flex;
-  height: 47px;
   width: 100%;
 }
 
@@ -127,28 +130,39 @@
   text-align: left;
   vertical-align: middle;
   width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 
 .betterTable .bt-header .bt-header-cell {
   align-self: center;
   box-sizing: border-box;
-  display: flex;
-  justify-self: center;
-  align-items: center;
+  /* display: flex; */
+  display: table-cell;
   padding: 0 8px;
   text-align: left;
   vertical-align: middle;
 
-  line-height: 32px;
   height: 100%;
   width: 100%;
 }
 
-.betterTable .bt-header .bt-header-cell .bt-header-body {
+.betterTable .bt-header .bt-header-cell .bt-header-contents {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  align-items: center;
+}
+
+.betterTable .bt-header .bt-header-cell .bt-header-contents .bt-header-body {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
   flex: 1 1 auto;
 }
 
-.betterTable .bt-header .bt-header-cell .bt-column-sort {
+.betterTable .bt-header .bt-header-cell .bt-header-contents .bt-column-sort {
   text-align: center;
   font-size: 24px;
   line-height: inherit;
