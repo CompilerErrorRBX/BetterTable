@@ -491,13 +491,19 @@ const BetterTable = (function() {
 
   // Helper to extend object properties
   function extend(extendsFrom, obj) {
-    var extension = Object.assign({}, extendsFrom);
-    for (var i in obj) {
-      if (obj.hasOwnProperty(i)) {
-        extension[i] = obj[i];
+    var extended = {};
+    var prop;
+    for (prop in extendsFrom) {
+      if (Object.prototype.hasOwnProperty.call(extendsFrom, prop)) {
+        extended[prop] = extendsFrom[prop];
       }
     }
-    return extension;
+    for (prop in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, prop)) {
+        extended[prop] = obj[prop];
+      }
+    }
+    return extended;
   };
 
   // BetterTable library objects
