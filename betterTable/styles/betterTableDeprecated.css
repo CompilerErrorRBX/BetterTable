@@ -7,9 +7,12 @@
   max-height: inherit;
 }
 .betterTable .bt-main-container {
-  position: relative;
+  position: absolute;
   display: flex;
+  flex-direction: column;
   width: 100%;
+  top: 48px;
+  max-height: inherit;
 }
 
 .betterTable .bt-main-container.bt-header-floated {
@@ -28,6 +31,7 @@
 }
 
 .betterTable .bt-table {
+  box-sizing: border-box;
   display: table;
   table-layout: fixed;
   width: 100%;
@@ -117,7 +121,6 @@
 
 .betterTable .bt-header .bt-header-container {
   position: absolute;
-  display: flex;
   width: 100%;
 }
 
@@ -129,7 +132,6 @@
   padding: 0 8px;
   text-align: left;
   vertical-align: middle;
-  width: 100%;
   text-overflow: ellipsis;
   overflow: hidden;
 }
@@ -144,7 +146,6 @@
   vertical-align: middle;
 
   height: 100%;
-  width: 100%;
 }
 
 .betterTable .bt-header .bt-header-cell .bt-header-contents {
@@ -163,9 +164,10 @@
 }
 
 .betterTable .bt-header .bt-header-cell .bt-header-contents .bt-column-sort {
+  display: flex;
+  align-items: center;
   text-align: center;
-  font-size: 24px;
-  line-height: inherit;
+  font-size: 12px;
   width: 32px;
   height: 32px;
 }

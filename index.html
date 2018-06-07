@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link href="./betterTable/styles/betterTable.css" rel="stylesheet" />
+    <!-- <link href="./betterTable/styles/betterTable.css" rel="stylesheet" /> -->
+    <link href="./betterTable/styles/betterTableFlex.css" rel="stylesheet" />
     <link href="site.css" rel="stylesheet" />
-    <script src="./betterTable/src/betterTable.js"></script>
+    <script src="./betterTable/src/betterTableFlex.js"></script>
   </head>
   <body>
-    <div id="container" style="max-height: 500px;"></div>
+    <div id="container" style="height: 500px;"></div>
     <script>
       const rows = [];
       const rows2 = [];
@@ -29,10 +30,10 @@
       const tick = Date.now();
       const bt = new BetterTable.Table({
         columns: {
-          email: { name: 'Email that is a long column name.', props: { style: 'min-width: 150px; width: 150px;'  } },
-          fname: { name: 'First Name', props: { style: 'min-width: 500px; width: 500px;' } },
-          lname: { name: 'Last Name', props: { style: 'min-width: 500px; width: 500px;' } },
-          username: { name: 'Username', props: { style: 'min-width: 500px; width: 500px;' } },
+          email: { name: 'Email', props: { width: '100%', minWidth: '100px' } },
+          fname: { name: 'First Name', props: { width: '1050px' } },
+          lname: { name: 'Last Name', props: { width: '1050px' } },
+          username: { name: 'Username', props: { width: '1050px' } },
         },
         rows,
         appendTo: document.getElementById('container'),
@@ -40,7 +41,7 @@
       console.log('BetterSelect initialized in', (Date.now() - tick) + 'ms');
 
       const $filter = document.createElement('input');
-      $filter.className = 'bt-filter';
+      $filter.className = 'btf-filter';
       $filter.placeholder = 'Filter'
 
       bt.$toolbarEl.appendChild($filter);
@@ -65,55 +66,6 @@
         Column.toggleSort();
       });
 
-      setTimeout(function() {
-        console.log('Rows changed');
-        bt.rowData = rows2;
-      }, 5000);
     </script>
-    <!-- <div class="betterTable">
-      <div class="bt-toolbar">
-        <strong>BetterTable</strong>
-        <div class="bt-spacer"></div>
-        <input class="bt-filter" placeholder="Filter" />
-      </div>
-      <div class="bt-main-container bt-header-floated bt-lazy">
-        <div class="bt-container">
-          <div class="bt-progress">
-            <div class="bt-progress-bar"></div>
-          </div>
-          <div class="bt-table">
-            <div class="bt-columns">
-              <div class="bt-column"></div>
-              <div class="bt-column" style="width: 160px"></div>
-              <div class="bt-column" style="width: 160px"></div>
-            </div>
-            <div class="bt-header">
-              <div class="bt-header-container">
-                <div class="bt-header-cell">Email</div>
-                <div class="bt-header-cell" style="min-width: 160px;">First Name</div>
-                <div class="bt-header-cell" style="min-width: 160px;">Last Name</div>
-              </div>
-            </div>
-            <div class="bt-body">
-              <div class="bt-row">
-                <div class="bt-cell">stephenlkmartin@gmail.com</div>
-                <div class="bt-cell">Stephen</div>
-                <div class="bt-cell">Martin</div>
-              </div>
-              <div class="bt-row">
-                <div class="bt-cell">dlmartin@gmail.com</div>
-                <div class="bt-cell">Daniel</div>
-                <div class="bt-cell">Martin</div>
-              </div>
-              <div class="bt-row">
-                <div class="bt-cell">tonymu@gmail.com</div>
-                <div class="bt-cell">Tony</div>
-                <div class="bt-cell">Mu</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </body>
 </html>

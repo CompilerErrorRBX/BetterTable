@@ -166,7 +166,7 @@ const BetterTable = (function() {
         this.$headerContainer.appendChild($headerContainer);
 
         if (this.settings.columnHeight === 'auto') {
-          this.__headerHeight = this.$headerContainer.clientHeight + 'px';
+          this.__headerHeight = (this.$headerContainer.clientHeight-1) + 'px';
         } else {
           this.__headerHeight = this.settings.columnHeight;
         }
@@ -315,6 +315,8 @@ const BetterTable = (function() {
       const defaults = {
         style: '',
         cellStyle: '',
+        width: null,
+        minWidth: null,
       };
 
       this.settings = extend(defaults, opts);
@@ -343,6 +345,20 @@ const BetterTable = (function() {
         const $headerEl = document.createElement('div');
         $headerEl.className = 'bt-header-cell';
         $headerEl.style = this.settings.style;
+
+        if (this.settings.width) {
+          const width = this.settings.width;
+          $columnEl.style.width = width;
+          $headerEl.style.width = width;
+          $columnEl.style.minWidth = width;
+          $headerEl.style.minWidth = width;
+        }
+
+        if (this.settings.minWidth) {
+          const width = this.settings.minWidth;
+          $columnEl.style.minWidth = width;
+          $headerEl.style.minWidth = width;
+        }
 
         const $headerContent = document.createElement('div');
         $headerContent.className = 'bt-header-contents';
