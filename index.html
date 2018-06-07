@@ -30,12 +30,12 @@
       const tick = Date.now();
       const bt = new BetterTable.Table({
         columns: {
-          email: { name: 'Email', props: { width: '100%', minWidth: '100px' } },
-          fname: { name: 'First Name', props: { width: '1050px' } },
-          lname: { name: 'Last Name', props: { width: '1050px' } },
-          username: { name: 'Username', props: { width: '1050px' } },
+          email: { name: 'Email', props: { } },
+          fname: { name: 'First Name', props: { } },
+          lname: { name: 'Last Name', props: { } },
+          username: { name: 'Username', props: { } },
         },
-        rows,
+        rows: rows,
         appendTo: document.getElementById('container'),
       });
       console.log('BetterSelect initialized in', (Date.now() - tick) + 'ms');

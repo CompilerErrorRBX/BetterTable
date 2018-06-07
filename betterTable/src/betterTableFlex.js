@@ -232,7 +232,7 @@ const BetterTable = (function() {
           const cells = Object.keys(row);
           for (let i = 0; i < cells.length; i++) {
             if (row[cells[i]].toLowerCase().indexOf(filterStringLower) > -1) {
-              rows.push({ row, index });
+              rows.push({ row: row, index: index });
               break;
             }
           }
