@@ -11,8 +11,6 @@ const BetterTable = (function() {
         rowHeight: 32,            // TODO: Make this adjust row size accordingly.
         headerHeight: 32,         // Adjusts the height of the header row.
         toolbar: true,            // Toggles the toolbar on the betterTable.
-        columnsSortable: true,    // Whether the columns can be sorted or not.
-        columnHeight: 'auto',     // Specify column height in pixels, setting this to auto will make BetterTable attempt to get the actual height.
         // TODO: Handle max display columns as well
       };
 
@@ -77,7 +75,6 @@ const BetterTable = (function() {
 
         $btfBody.appendChild($btfColumns);
         $btfTable.appendChild($btfHeaders);
-        // $btfTable.appendChild($btfColumns);
         $btfTable.appendChild($btfBody);
         $betterTableFlex.appendChild($btfTable);
 
@@ -111,13 +108,13 @@ const BetterTable = (function() {
       __renderColumns: function() {
         const $columnContainer = document.createDocumentFragment();
         const $headerContainer = document.createDocumentFragment();
-        this.__columnsOrdered.forEach(function (columnName) {
-          const column = this.columns[columnName];
+        for (let i = 0; i < this.__columnsOrdered.length; i++) {
+          const column = this.columns[this.__columnsOrdered[i]];
           $columnContainer.appendChild(column.$el);
           $headerContainer.appendChild(column.$headerEl);
 
           column.__render();
-        }.bind(this));
+        }
 
         this.$columnsEl.innerHTML = '';
         this.$headersEl.innerHTML = '';
@@ -151,14 +148,10 @@ const BetterTable = (function() {
 
         for (let i = scrollRowIndex - offset; i < rowRange; i++) {
           let index = i;
-          
           if (this.__filteredRows) {
             index = this.__filteredRows[i].index;
           }
-          
           const row = this.rows[index] || this.__processRow(index);
-
-
           row.__render();
 
           for (let i = 0; i < this.__columnsOrdered.length; i++) {
@@ -178,11 +171,13 @@ const BetterTable = (function() {
       __processColumns: function() {
         const data = this.columnData;
         const columns = {};
-        Object.keys(data).forEach(function(column) {
+
+        for (let i = 0; i < Object.keys(data).length; i++) {
+          const column = Object.keys(data)[i];
           const columnData = data[column];
           columns[column] = new Column(this, columnData.name, columnData.props);
           this.__columnsOrdered.push(column);
-        }.bind(this));
+        }
 
         this.columns = columns;
         return columns;
@@ -364,10 +359,10 @@ const BetterTable = (function() {
       __render: function () {
         if (!this.__proccessed) {
           this.__proccessed = true;
-          this.table.__columnsOrdered.forEach(function (column) {
-            const cell = this.cells[column];
+          for (let i = 0; i < this.table.__columnsOrdered.length; i++) {
+            const cell = this.cells[this.table.__columnsOrdered[i]];
             cell.__render();
-          }.bind(this));
+          }
         }
       },
     };
@@ -455,9 +450,9 @@ const BetterTable = (function() {
 
     Event.prototype = {
       dispatch: function (args) { // Triggers the event causing all listener actions to fire.
-        this.__listeners.forEach(function (listener) {
-          listener.execute(args);
-        });
+        for (let i = 0; i < this.__listeners.length; i++) {
+          this.__listeners[i].execute(args);
+        }
       },
       connect: function (action) { // Connects a listener to this event with the corresponding action.
         const listener = new Listener(action, this);
