@@ -28,10 +28,17 @@ const BetterTable = (function() {
       this.__proccessing = false;
       this.__progress = 0;
 
+      // Elements
+      this.$el = null;
+      this.$tableEl = null;
+      this.$bodyEl = null;
+      this.$headersEl = null;
+      this.$columnsEl = null;
+      
       // Events
-      this.onCellClick = new Event(); // When any cell is clicked. Returns the Cell clicked
-      this.onCellDoubleClick = new Event(); // When any cell is double-clicked
-      this.onColumnClick = new Event(); // When the header of a column is clicked. Returns the Cell clicked
+      this.onCellClick = new Event();         // When any cell is clicked. Returns the Cell clicked
+      this.onCellDoubleClick = new Event();   // When any cell is double-clicked
+      this.onColumnClick = new Event();       // When the header of a column is clicked. Returns the Cell clicked
       this.onColumnDoubleClick = new Event(); // When the header of a column is double-clicked
 
       this.__onRender = new Event();
@@ -158,7 +165,6 @@ const BetterTable = (function() {
             const columnName = this.__columnsOrdered[i];
             containers[columnName].appendChild(row.cells[columnName].$el);
           }
-          // $rowContainer.appendChild(row.$el);
         }
 
         for (let i = 0; i < this.__columnsOrdered.length; i++) {
@@ -167,8 +173,6 @@ const BetterTable = (function() {
           column.$el.innerHTML = '';
           column.$el.appendChild(containers[columnName]);
         }
-        // this.$rowsContainer.innerHTML = '';
-        // this.$rowsContainer.appendChild($rowContainer);
       },
 
       __processColumns: function() {
@@ -226,8 +230,6 @@ const BetterTable = (function() {
         }
 
         const filterStringLower = filterString.toLowerCase();
-
-        const tick = Date.now();
         this.__filteredRows = this.rowData.reduce(function (rows, row, index) {
           const cells = Object.keys(row);
           for (let i = 0; i < cells.length; i++) {
@@ -239,7 +241,6 @@ const BetterTable = (function() {
           
           return rows;
         }.bind(this), []);
-        console.log('Filtering', this.rowData.length, 'rows took:', (Date.now() - tick) + 'ms');
 
         this.__renderRows();
       },

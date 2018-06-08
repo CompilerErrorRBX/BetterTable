@@ -11,7 +11,7 @@
     <script>
       const rows = [];
       const rows2 = [];
-      for (let i = 0; i < 20000; i++) {
+      for (let i = 0; i < 200000; i++) {
         rows.push({
           email: 'someemail@email.com',
           fname: 'FirstName' + i,
@@ -30,10 +30,10 @@
       const tick = Date.now();
       const bt = new BetterTable.Table({
         columns: {
-          email: { name: 'Email', props: { } },
-          fname: { name: 'First Name', props: { } },
-          lname: { name: 'Last Name', props: { } },
-          username: { name: 'Username', props: { } },
+          email: { name: 'Email', props: { width: '100%', minWidth: '800px'  } },
+          fname: { name: 'First Name', props: { minWidth: '800px' } },
+          lname: { name: 'Last Name', props: { minWidth: '800px' } },
+          username: { name: 'Username', props: { minWidth: '800px' } },
         },
         rows: rows,
         appendTo: document.getElementById('container'),
