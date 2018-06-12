@@ -18,26 +18,29 @@ const BetterTable = (function() {
       this.columns = {};
       this.rows = [];
 
-      this.__rowData = this.settings.rows;
-      this.__columnData = this.settings.columns;
-      this.__columnsOrdered = [];
-      this.__filter = '';
-      this.__filteredRows = null;
-      this.__proccessing = false;
-      this.__progress = 0;
-
       // Elements
       this.$el = null;
       this.$tableEl = null;
       this.$bodyEl = null;
       this.$headersEl = null;
       this.$columnsEl = null;
-      
+
       // Events
       this.onCellClick = new Event();         // When any cell is clicked. Returns the Cell clicked
       this.onCellDoubleClick = new Event();   // When any cell is double-clicked
       this.onColumnClick = new Event();       // When the header of a column is clicked. Returns the Cell clicked
       this.onColumnDoubleClick = new Event(); // When the header of a column is double-clicked
+      this.onRowsUpdate = new Event();        // When the list or rows is changed
+
+      // Private
+      this.__columnData = this.settings.columns;
+      this.__columnsOrdered = [];
+      this.__currentIndex = 0;
+      this.__filter = '';
+      this.__filteredRows = null;
+      this.__proccessing = false;
+      this.__progress = 0;
+      this.__rowData = this.settings.rows;
 
       this.__onRender = new Event();
 
@@ -146,7 +149,7 @@ const BetterTable = (function() {
           containers[columnName] = document.createDocumentFragment();
         }
 
-        for (let i = scrollRowIndex - offset; i < rowRange; i++) {
+        for (let i = scrollRowIndex - offset; i < rowRange; i++) { // Get all rows in view
           let index = i;
           if (this.__filteredRows) {
             index = this.__filteredRows[i].index;
@@ -156,7 +159,7 @@ const BetterTable = (function() {
 
           for (let i = 0; i < this.__columnsOrdered.length; i++) {
             const columnName = this.__columnsOrdered[i];
-            containers[columnName].appendChild(row.cells[columnName].$el);
+            containers[columnName].appendChild(row.cells[columnName].$el); // Append row cells to respective column fragments
           }
         }
 
@@ -164,7 +167,7 @@ const BetterTable = (function() {
           const columnName = this.__columnsOrdered[i];
           const column = this.columns[columnName];
           column.$el.innerHTML = '';
-          column.$el.appendChild(containers[columnName]);
+          column.$el.appendChild(containers[columnName]); // Append column fragments to their respective column elements
         }
       },
 
@@ -175,7 +178,7 @@ const BetterTable = (function() {
         for (let i = 0; i < Object.keys(data).length; i++) {
           const column = Object.keys(data)[i];
           const columnData = data[column];
-          columns[column] = new Column(this, columnData.name, columnData.props);
+          columns[column] = new Column(this, columnData);
           this.__columnsOrdered.push(column);
         }
 
@@ -184,8 +187,8 @@ const BetterTable = (function() {
       },
 
       __processRow: function (index) {
-        const row = new Row(this, index);
         const rowData = this.rowData[index];
+        const row = new Row(this, rowData, index);
 
         Object.keys(this.columnData).map(function (columnData) {
           const value = rowData[columnData] || '';
@@ -211,6 +214,7 @@ const BetterTable = (function() {
         this.__rowData = data;
         this.rows = [];
         this.__renderRows();
+        this.onRowsUpdate.dispatch(rows);
       },
       get columnData() {
         return this.__columnData;
@@ -245,7 +249,7 @@ const BetterTable = (function() {
   })();
 
   const Column = (function btColumn() {
-    function Column(table, name, opts) {
+    function Column(table, data) {
       const defaults = {
         style: '',
         cellStyle: '',
@@ -253,10 +257,11 @@ const BetterTable = (function() {
         minWidth: null,
       };
 
-      this.settings = extend(defaults, opts);
+      this.settings = extend(defaults, data.props);
 
       this.table = table;
-      this.name = name;
+      this.name = data.name;
+      this.data = data;
       this.cells = [];
 
       this.__sort = 'none';
@@ -348,10 +353,11 @@ const BetterTable = (function() {
   })();
 
   const Row = (function btRow() {
-    function Row(table, index) {
+    function Row(table, data, index) {
       this.table = table;
       this.cells = {};
       this.index = index;
+      this.data = data;
       this.__processed = false;
     }
 
@@ -408,39 +414,6 @@ const BetterTable = (function() {
     };
 
     return Cell;
-  })();
-
-  const Promise = (function promiseObject() {
-    function Promise(callback) {
-      this.__then = new Event();
-      this.__catch = new Event();
-      this.__finally = new Event();
-
-      function resolve(args) {
-        this.__then.dispatch(args);
-        this.__finally.dispatch(args);
-      }
-      function reject(args) {
-        this.__catch.dispatch(args);
-        this.__finally.dispatch(args);
-      }
-
-      callback(resolve.bind(this), reject.bind(this));
-    }
-
-    Promise.prototype = {
-      then: function (action) { // When the promise completes
-        this.__then.connect(action);
-      },
-      catch: function (action) { // When the promise fails
-        this.__catch.connect(action);
-      },
-      finally: function (action) { // When the promise completes or fails
-        this.__finally.connect(action);
-      },
-    };
-
-    return Promise;
   })();
 
   const Event = (function eventObject() {
@@ -503,7 +476,6 @@ const BetterTable = (function() {
   };
 
   // BetterTable library objects
-  
   BetterTableLibrary.Table = Table;
   BetterTableLibrary.Row = Row;
   BetterTableLibrary.Column = Column;
