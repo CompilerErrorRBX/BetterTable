@@ -318,6 +318,7 @@ const BetterTable = (function() {
         cellStyle: '',
         width: null,
         minWidth: null,
+        order: 1,
       };
 
       this.settings = extend(defaults, data.props);
@@ -327,6 +328,7 @@ const BetterTable = (function() {
       this.data = data;
       this.cells = [];
 
+      this.__order = this.settings.order;
       this.__sort = 'none';
 
       this.onClick = new Event();
@@ -381,6 +383,8 @@ const BetterTable = (function() {
         this.$el = $columnEl;
         this.$sortEl = $sortEl;
         this.$headerEl = $headerEl;
+
+        this.order = this.__order;
       },
       __render: function() {
 
@@ -396,6 +400,14 @@ const BetterTable = (function() {
           case 'desc':
             this.sort = 'none';
         }
+      },
+      get order() {
+        return this.__order;
+      },
+      set order(index) {
+        this.__order = index;
+        this.$headerEl.style.order = index;
+        this.$el.style.order = index;
       },
       get sort() {
         return this.__sort;
