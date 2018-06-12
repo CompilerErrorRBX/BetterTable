@@ -14,6 +14,7 @@ const BetterTable = (function() {
         footer: true,             // Toggles the footer on the betterTable.
         showRowIndex: true,       // Toggles the element showing current row index.
         customSortClass: '',      // Sets custom classes for the sort labels on column headers to allow using custom icon font libraries.
+        useNativeSorting: true,   // Toggles whether the table should handle sorting.
         // TODO: Handle max display columns as well
       };
 
@@ -42,6 +43,7 @@ const BetterTable = (function() {
       this.__filter = '';
       this.__filteredRows = null;
       this.__rowData = this.settings.rows;
+      this.__originalRowData = this.settings.rows;
       this.__rowIndexInputDebounce = null;
 
       this.__onRender = new Event();
@@ -186,10 +188,7 @@ const BetterTable = (function() {
         }
 
         for (let i = scrollRowIndex - offset; i < rowRange; i++) { // Get all rows in view
-          let index = i;
-          if (this.__filteredRows) {
-            index = this.__filteredRows[i].index;
-          }
+          const index = this.__filteredRows ? this.__filteredRows[i] : i;
           const row = this.rows[index] || this.__processRow(index);
           row.__render();
 
@@ -230,7 +229,7 @@ const BetterTable = (function() {
         for (let i = 0; i < Object.keys(data).length; i++) {
           const column = Object.keys(data)[i];
           const columnData = data[column];
-          columns[column] = new Column(this, columnData);
+          columns[column] = new Column(this, column, columnData);
           this.__columnsOrdered.push(column);
         }
 
@@ -262,15 +261,44 @@ const BetterTable = (function() {
         this.rowIndex = this.$indexInputEl.value;
       },
 
+      __updateRows: function(rows) {
+        this.__rowData = rows;
+        this.rows = [];
+        this.__renderRows();
+        this.onRowsUpdate.dispatch(rows);
+      },
+
+      __sortRows: function(columnName, order) {
+        if (order === 'none') {
+          this.__updateRows(this.__originalRowData);
+          return;
+        }
+
+        const rows = [];
+
+        const originalRows = this.__originalRowData;
+        const modifier = order === 'asc' ? 1 : -1;
+        let i = originalRows.length;
+        while (i--) rows[i] = originalRows[i];
+
+        quickSort(rows, 0, rows.length - 1, rows.length, function (x, y) {
+          if (x[columnName] >= y[columnName]) {
+            return 1 * modifier;
+          } else {
+            return -1 * modifier;
+          }
+          return 0;
+        });
+        this.__updateRows(rows);
+      },
+
       // Getters and Setters.
       get rowData() {
         return this.__rowData;
       },
       set rowData(data) {
-        this.__rowData = data;
-        this.rows = [];
-        this.__renderRows();
-        this.onRowsUpdate.dispatch(data);
+        this.__originalRowData = data;
+        this.__updateRows(data);
       },
       get rowIndex() {
         return this.__currentIndex;
@@ -312,7 +340,7 @@ const BetterTable = (function() {
   })();
 
   const Column = (function btColumn() {
-    function Column(table, data) {
+    function Column(table, id, data) {
       const defaults = {
         style: '',
         cellStyle: '',
@@ -326,6 +354,7 @@ const BetterTable = (function() {
       this.table = table;
       this.name = data.name;
       this.data = data;
+      this.id = id;
       this.cells = [];
 
       this.__order = this.settings.order;
@@ -421,6 +450,10 @@ const BetterTable = (function() {
         }
         this.__sort = val;
         this.$sortEl.className = 'btf-column-sort ' + val + ' ' + this.table.settings.customSortClass;
+
+        if (this.table.settings.useNativeSorting) { // Native sorting
+          this.table.__sortRows(this.id, this.__sort);
+        }
       }
     };
 
@@ -549,6 +582,44 @@ const BetterTable = (function() {
     }
     return extended;
   };
+
+  function quickSort(arr, leftPos, rightPos, arrLength, compare) {
+    let initialLeftPos = leftPos;
+    let initialRightPos = rightPos;
+    let direction = true;
+    let pivot = rightPos;
+    while ((leftPos - rightPos) < 0) {
+      if (direction) {
+        if (compare(arr[pivot], arr[leftPos]) > 0) {
+          quickSort.swap(arr, pivot, leftPos);
+          pivot = leftPos;
+          rightPos--;
+          direction = !direction;
+        } else
+          leftPos++;
+      } else {
+        if (compare(arr[pivot], arr[rightPos]) > 0) {
+          rightPos--;
+        } else {
+          quickSort.swap(arr, pivot, rightPos);
+          leftPos++;
+          pivot = rightPos;
+          direction = !direction;
+        }
+      }
+    }
+    if (pivot - 1 > initialLeftPos) {
+      quickSort(arr, initialLeftPos, pivot - 1, arrLength, compare);
+    }
+    if (pivot + 1 < initialRightPos) {
+      quickSort(arr, pivot + 1, initialRightPos, arrLength, compare);
+    }
+  }
+  quickSort.swap = (arr, el1, el2) => {
+    let swapedElem = arr[el1];
+    arr[el1] = arr[el2];
+    arr[el2] = swapedElem;
+  }
 
   // BetterTable library objects
   BetterTableLibrary.Table = Table;
