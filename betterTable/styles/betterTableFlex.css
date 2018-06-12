@@ -77,6 +77,11 @@
   white-space: nowrap;
 }
 
+.btf-index-input {
+  display: inline-flex;
+  flex: 1 0 auto;
+}
+
 .btf-header {
   align-items: center;
   background-color: inherit;

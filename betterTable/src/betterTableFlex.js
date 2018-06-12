@@ -42,6 +42,7 @@ const BetterTable = (function() {
       this.__filter = '';
       this.__filteredRows = null;
       this.__rowData = this.settings.rows;
+      this.__rowIndexInputDebounce = null;
 
       this.__onRender = new Event();
 
@@ -88,11 +89,30 @@ const BetterTable = (function() {
           const $btfScrollIndex = document.createElement('div');
           $btfScrollIndex.className = 'btf-scroll-index';
 
+          const $btfIndexInput = document.createElement('input');
+          $btfIndexInput.className = 'btf-index-input';
+          $btfIndexInput.type = 'number';
+
           $btfFooter.appendChild($btfScrollIndex);
           $btfTable.appendChild($btfFooter);
 
           this.$footerEl = $btfFooter;
           this.$scrollIndexEl = $btfScrollIndex;
+          this.$indexInputEl = $btfIndexInput;
+
+          const $textContainer = document.createDocumentFragment();
+          const $topIndex = document.createElement('span');
+          const $totalIndex = document.createElement('span');
+          $textContainer.appendChild($topIndex);
+          $textContainer.appendChild(this.$indexInputEl);
+          $textContainer.appendChild($totalIndex);
+
+          this.$__indexFront = $topIndex;
+          this.$__indexEnd = $totalIndex;
+
+          this.$scrollIndexEl.appendChild($textContainer);
+
+          this.$indexInputEl.oninput = function(e) { this.__rowIndexInput(e) }.bind(this);
         }
 
         $betterTableFlex.appendChild($btfTable);
@@ -189,11 +209,16 @@ const BetterTable = (function() {
         this.__currentIndex = Math.min(scrollRowIndex + Math.floor(containerHeight / this.settings.rowHeight), dataLength-1);
         if (this.settings.showRowIndex) {
           const fromIndex = (scrollRowIndex + 1).toLocaleString();
-          const toIndex = (this.__currentIndex + 1).toLocaleString();
+          const toIndex = (this.__currentIndex + 1);
           if (scrollRowIndex >= this.__currentIndex) {
-            this.$scrollIndexEl.innerHTML = 'Showing ' + toIndex + ' of ' + dataLength.toLocaleString() + ' entries';
+            this.$__indexFront.innerHTML = 'Showing ' + fromIndex;
+            this.$indexInputEl.style.display = 'none';
+            this.$__indexEnd.innerHTML = ' of ' + dataLength.toLocaleString() + ' entries'
           } else {
-            this.$scrollIndexEl.innerHTML = 'Showing ' + fromIndex + ' to ' + toIndex + ' of ' + dataLength.toLocaleString() + ' entries';
+            this.$indexInputEl.style.display = 'inline-flex';
+            this.$__indexFront.innerHTML = 'Showing ' + fromIndex + ' to ';
+            this.$indexInputEl.value = toIndex;
+            this.$__indexEnd.innerHTML = ' of ' + dataLength.toLocaleString() + ' entries'
           }
         }
       },
@@ -231,6 +256,10 @@ const BetterTable = (function() {
 
         this.rows[index] = row;
         return row;
+      },
+
+      __rowIndexInput: function(e) {
+        this.rowIndex = this.$indexInputEl.value;
       },
 
       // Getters and Setters.
