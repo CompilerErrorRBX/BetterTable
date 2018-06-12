@@ -190,7 +190,7 @@ const BetterTable = (function() {
         if (this.settings.showRowIndex) {
           const fromIndex = (scrollRowIndex + 1).toLocaleString();
           const toIndex = (this.__currentIndex + 1).toLocaleString();
-          if (scrollRowIndex > this.__currentIndex) {
+          if (scrollRowIndex >= this.__currentIndex) {
             this.$scrollIndexEl.innerHTML = 'Showing ' + toIndex + ' of ' + dataLength.toLocaleString() + ' entries';
           } else {
             this.$scrollIndexEl.innerHTML = 'Showing ' + fromIndex + ' to ' + toIndex + ' of ' + dataLength.toLocaleString() + ' entries';

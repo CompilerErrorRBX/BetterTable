@@ -11,7 +11,7 @@
     <div id="container" style="height: 500px;"></div>
     <script>
       const rows = [];
-      for (let i = 0; i < 500000; i++) {
+      for (let i = 0; i < 1000000; i++) {
         rows.push({
           email: 'someemail@email.com',
           fname: 'FirstName' + (i + 1),
@@ -64,5 +64,6 @@
         bt.rowIndex = 4852;
       }, 2000);
     </script>
+    <span>*Browser may have insufficient floating point percision to support total row count</span>
   </body>
 </html>
