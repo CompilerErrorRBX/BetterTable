@@ -12,7 +12,8 @@ const BetterTable = (function() {
         headerHeight: 32,         // Adjusts the height of the header row.
         toolbar: true,            // Toggles the toolbar on the betterTable.
         footer: true,             // Toggles the footer on the betterTable.
-        showRowIndex: true,       // Toggles the element showing current row index
+        showRowIndex: true,       // Toggles the element showing current row index.
+        customSortClass: '',      // Sets custom classes for the sort labels on column headers to allow using custom icon font libraries.
         // TODO: Handle max display columns as well
       };
 
@@ -185,11 +186,15 @@ const BetterTable = (function() {
           column.$el.appendChild(containers[columnName]); // Append column fragments to their respective column elements
         }
 
-        this.__currentIndex = scrollRowIndex + Math.floor(containerHeight / this.settings.rowHeight);
+        this.__currentIndex = Math.min(scrollRowIndex + Math.floor(containerHeight / this.settings.rowHeight), dataLength-1);
         if (this.settings.showRowIndex) {
           const fromIndex = (scrollRowIndex + 1).toLocaleString();
           const toIndex = (this.__currentIndex + 1).toLocaleString();
-          this.$scrollIndexEl.innerHTML = 'Showing ' + fromIndex + ' to ' + toIndex + ' of ' + dataLength.toLocaleString() + ' entries';
+          if (scrollRowIndex > this.__currentIndex) {
+            this.$scrollIndexEl.innerHTML = 'Showing ' + toIndex + ' of ' + dataLength.toLocaleString() + ' entries';
+          } else {
+            this.$scrollIndexEl.innerHTML = 'Showing ' + fromIndex + ' to ' + toIndex + ' of ' + dataLength.toLocaleString() + ' entries';
+          }
         }
       },
 
@@ -236,7 +241,7 @@ const BetterTable = (function() {
         this.__rowData = data;
         this.rows = [];
         this.__renderRows();
-        this.onRowsUpdate.dispatch(rows);
+        this.onRowsUpdate.dispatch(data);
       },
       get rowIndex() {
         return this.__currentIndex;
@@ -329,8 +334,8 @@ const BetterTable = (function() {
           $headerEl.style.minWidth = width;
         }
 
-        const $sortEl = document.createElement('div');
-        $sortEl.className = 'btf-column-sort none';
+        const $sortEl = document.createElement('i');
+        $sortEl.className = 'btf-column-sort none ' + this.table.settings.customSortClass;
 
         $headerEl.appendChild($sortEl);
 
@@ -374,7 +379,7 @@ const BetterTable = (function() {
           return;
         }
         this.__sort = val;
-        this.$sortEl.className = 'btf-column-sort ' + val;
+        this.$sortEl.className = 'btf-column-sort ' + val + ' ' + this.table.settings.customSortClass;
       }
     };
 

@@ -3,6 +3,7 @@
   <head>
     <!-- <link href="./betterTable/styles/betterTable.css" rel="stylesheet" /> -->
     <link href="./betterTable/styles/betterTableFlex.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons" rel="stylesheet">
     <link href="site.css" rel="stylesheet" />
     <script src="./betterTable/src/betterTableFlex.js"></script>
   </head>
@@ -29,6 +30,7 @@
         },
         rows: rows,
         appendTo: document.getElementById('container'),
+        customSortClass: 'material-icons'
       });
       console.log('BetterSelect initialized in', (Date.now() - tick) + 'ms');
 

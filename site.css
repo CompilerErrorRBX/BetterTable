@@ -3,4 +3,62 @@ body, html {
   width: 100%;
   margin: 0;
   padding: 0;
+  font-family: Roboto;
 }
+
+.better-table-flex {
+  background-color: #eee;
+}
+
+.btf-headers {
+  background-color: #42A5F5;
+  color: #fff;
+}
+
+.btf-toolbar {
+  background-color: #2196F3;
+}
+
+.btf-footer {
+  background-color: #eee;
+  border: 1px solid #ddd;
+}
+
+.btf-filter {
+  border-radius: 2px;
+  background-color: rgba(255, 255, 255, 0.3);
+  border: none;
+  color: #fff;
+  padding: 12px 8px;
+  outline: none;
+  flex: 1 1 auto;
+  max-width: 420px;
+
+  transition: all cubic-bezier(0.075, 0.82, 0.165, 1) 0.2s;
+}
+
+.btf-filter:focus {
+  background-color: rgba(255, 255, 255, 1);
+  color: rgba(0,0,0,0.8);
+}
+
+.btf-filter::-webkit-input-placeholder {
+  color: #fff;
+}
+
+.btf-filter:focus::-webkit-input-placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.btf-column-sort.none:after {
+  content: '';
+}
+
+.btf-column-sort.asc:after {
+  content: 'arrow_upward';
+}
+
+.btf-column-sort.desc:after {
+  content: 'arrow_downward';
+}
+

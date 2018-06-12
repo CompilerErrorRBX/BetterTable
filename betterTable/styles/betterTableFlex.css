@@ -2,26 +2,21 @@
 
 .better-table-flex {
   position: relative;
-  background-color: #eee;
   height: 100%;
 }
 
 .btf-toolbar {
   display: flex;
-  background-color: #eee;
   min-height: 48px;
   align-items: center;
   padding: 4px 8px;
-  border-bottom: 1px solid #ddd
 }
 
 .btf-footer {
   display: flex;
-  background-color: #eee;
   min-height: 24px;
   align-items: center;
   padding: 4px 8px;
-  border: 1px solid #ddd
 }
 
 .btf-footer .btf-scroll-index {
@@ -59,12 +54,9 @@
 .btf-headers {
   position: relative;
   display: flex;
-  flex: 1 1;
-  flex-direction: row;
-  justify-self: flex-start;
+  flex: 1;
   justify-content: space-between;
-  height: 100%;
-  min-height: 46px;
+  align-self: start;
 }
 
 .btf-column {
@@ -83,16 +75,17 @@
   text-overflow: ellipsis;
   white-space: nowrap;
   line-height: 32px;
-  padding: 0 4px;
+  padding: 0 8px;
 }
 
 .btf-header {
   box-sizing: border-box;
   display: flex;
   align-items: center;
-  background-color: cyan;
+  color: inherit;
   width: 100%;
-  padding: 0 4px;
+  padding: 0 8px;
+  cursor: pointer;
 }
 
 .btf-header-contents {
@@ -110,14 +103,21 @@
   flex: 1 1 auto;
 }
 
-.btf-column-sort {
+.btf-header, i.btf-column-sort {
   display: flex;
   flex: 1 1;
   justify-content: flex-end;
   align-items: center;
-  font-size: 12px;
+  font-size: 16px;
   width: 32px;
   height: 32px;
+  text-transform: none;
+  font-style: normal;
+
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: 'liga';
 }
 
 .btf-column-sort.none:after {
