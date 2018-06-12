@@ -5,12 +5,14 @@ const BetterTable = (function() {
     function Table(opts) {
       const defaults = {
         columns: {},              // An object representing columns. { email: { name: 'Email', props: {} }, fname: { name: 'Email', props: {} }, lname: { name: 'Email', props: {} } }
-        rows: [],                 // An array of object key-value pairs representing rows of data. [{ email: 'stephenlmartin@gmail.com', fname: 'Stephen', lname: 'Martin' }]
+        rows: [],                 // An array of object key-value pairs representing rows of data. [{ email: 'someemail@gmail.com', fname: 'Bob', lname: 'Evans' }]
         appendTo: null,           // The element the table should be appended to. Defaults to body.
         maxDisplayRows: 50,       // The maximum number of rows to display at a time.
         rowHeight: 32,            // TODO: Make this adjust row size accordingly.
         headerHeight: 32,         // Adjusts the height of the header row.
         toolbar: true,            // Toggles the toolbar on the betterTable.
+        footer: true,             // Toggles the footer on the betterTable.
+        showRowIndex: true,       // Toggles the element showing current row index
         // TODO: Handle max display columns as well
       };
 
@@ -77,6 +79,21 @@ const BetterTable = (function() {
         $btfBody.appendChild($btfColumns);
         $btfTable.appendChild($btfHeaders);
         $btfTable.appendChild($btfBody);
+
+        if (this.settings.footer) {
+          const $btfFooter = document.createElement('div');
+          $btfFooter.className = 'btf-footer';
+
+          const $btfScrollIndex = document.createElement('div');
+          $btfScrollIndex.className = 'btf-scroll-index';
+
+          $btfFooter.appendChild($btfScrollIndex);
+          $btfTable.appendChild($btfFooter);
+
+          this.$footerEl = $btfFooter;
+          this.$scrollIndexEl = $btfScrollIndex;
+        }
+
         $betterTableFlex.appendChild($btfTable);
 
         if (this.settings.appendTo) {
@@ -167,6 +184,13 @@ const BetterTable = (function() {
           column.$el.innerHTML = '';
           column.$el.appendChild(containers[columnName]); // Append column fragments to their respective column elements
         }
+
+        this.__currentIndex = scrollRowIndex + Math.floor(containerHeight / this.settings.rowHeight);
+        if (this.settings.showRowIndex) {
+          const fromIndex = (scrollRowIndex + 1).toLocaleString();
+          const toIndex = (this.__currentIndex + 1).toLocaleString();
+          this.$scrollIndexEl.innerHTML = 'Showing ' + fromIndex + ' to ' + toIndex + ' of ' + dataLength.toLocaleString() + ' entries';
+        }
       },
 
       __processColumns: function() {
@@ -213,6 +237,13 @@ const BetterTable = (function() {
         this.rows = [];
         this.__renderRows();
         this.onRowsUpdate.dispatch(rows);
+      },
+      get rowIndex() {
+        return this.__currentIndex;
+      },
+
+      set rowIndex(index) {
+        this.$bodyEl.scrollTop = (index * this.settings.rowHeight) - (this.$bodyEl.clientHeight);
       },
       get columnData() {
         return this.__columnData;

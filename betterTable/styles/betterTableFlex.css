@@ -15,6 +15,20 @@
   border-bottom: 1px solid #ddd
 }
 
+.btf-footer {
+  display: flex;
+  background-color: #eee;
+  min-height: 24px;
+  align-items: center;
+  padding: 4px 8px;
+  border: 1px solid #ddd
+}
+
+.btf-footer .btf-scroll-index {
+  font-size: 12px;
+
+}
+
 .btf-table {
   display: inline-flex;
   flex-direction: column;

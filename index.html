@@ -10,20 +10,12 @@
     <div id="container" style="height: 500px;"></div>
     <script>
       const rows = [];
-      const rows2 = [];
-      for (let i = 0; i < 200000; i++) {
+      for (let i = 0; i < 500000; i++) {
         rows.push({
           email: 'someemail@email.com',
-          fname: 'FirstName' + i,
-          lname: 'LastName' + i,
-          username: 'Username' + i,
-        });
-
-        rows2.push({
-          email: 'someOtherEmail@email.com',
-          fname: 'NotFirstName' + i,
-          lname: 'NotLastName' + i,
-          username: 'NotUsername' + i,
+          fname: 'FirstName' + (i + 1),
+          lname: 'LastName' + (i + 1),
+          username: 'Username' + (i + 1),
         });
       }
 
@@ -66,6 +58,9 @@
         Column.toggleSort();
       });
 
+      setTimeout(function() {
+        bt.rowIndex = 4852;
+      }, 2000);
     </script>
   </body>
 </html>
