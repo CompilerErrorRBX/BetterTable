@@ -38,8 +38,6 @@ const BetterTable = (function() {
       this.__currentIndex = 0;
       this.__filter = '';
       this.__filteredRows = null;
-      this.__proccessing = false;
-      this.__progress = 0;
       this.__rowData = this.settings.rows;
 
       this.__onRender = new Event();
