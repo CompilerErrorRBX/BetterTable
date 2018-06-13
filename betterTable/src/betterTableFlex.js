@@ -282,12 +282,13 @@ const BetterTable = (function() {
         while (i--) rows[i] = originalRows[i];
 
         quickSort(rows, 0, rows.length - 1, rows.length, function (x, y) {
-          if (x[columnName] >= y[columnName]) {
+          if (x[columnName] > y[columnName]) {
             return 1 * modifier;
-          } else {
+          } else if (y[columnName] > x[columnName]) {
             return -1 * modifier;
+          } else {
+            return 0;
           }
-          return 0;
         });
         this.__updateRows(rows);
       },
@@ -591,7 +592,7 @@ const BetterTable = (function() {
     while ((leftPos - rightPos) < 0) {
       if (direction) {
         if (compare(arr[pivot], arr[leftPos]) > 0) {
-          quickSort.swap(arr, pivot, leftPos);
+          quickSortSwap(arr, pivot, leftPos);
           pivot = leftPos;
           rightPos--;
           direction = !direction;
@@ -601,7 +602,7 @@ const BetterTable = (function() {
         if (compare(arr[pivot], arr[rightPos]) > 0) {
           rightPos--;
         } else {
-          quickSort.swap(arr, pivot, rightPos);
+          quickSortSwap(arr, pivot, rightPos);
           leftPos++;
           pivot = rightPos;
           direction = !direction;
@@ -615,7 +616,7 @@ const BetterTable = (function() {
       quickSort(arr, pivot + 1, initialRightPos, arrLength, compare);
     }
   }
-  quickSort.swap = (arr, el1, el2) => {
+  function quickSortSwap(arr, el1, el2) {
     let swapedElem = arr[el1];
     arr[el1] = arr[el2];
     arr[el2] = swapedElem;
