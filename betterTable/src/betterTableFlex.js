@@ -14,7 +14,7 @@ const BetterTable = (function() {
         footer: true,             // Toggles the footer on the betterTable.
         showRowIndex: true,       // Toggles the element showing current row index.
         customSortClass: '',      // Sets custom classes for the sort labels on column headers to allow using custom icon font libraries.
-        useNativeSorting: true,   // Toggles whether the table should handle sorting.
+        useNativeSorting: false,  // Toggles whether the table should handle sorting.
         // TODO: Handle max display columns as well
       };
 
@@ -290,6 +290,7 @@ const BetterTable = (function() {
             return 0;
           }
         });
+
         this.__updateRows(rows);
       },
 
@@ -616,11 +617,40 @@ const BetterTable = (function() {
       quickSort(arr, pivot + 1, initialRightPos, arrLength, compare);
     }
   }
+
   function quickSortSwap(arr, el1, el2) {
     let swapedElem = arr[el1];
     arr[el1] = arr[el2];
     arr[el2] = swapedElem;
   }
+
+  function sortLSD(array, maxDigitSymbols) {
+    const counter = [[]];
+
+    let mod = 256;
+    let dev = 1;
+    for (let i = 0; i < maxDigitSymbols; i++, dev *= 256, mod *= 256) {
+      for (let j = 0; j < array.length; j++) {
+        const bucket = parseInt((array[j] % mod) / dev);
+        if (counter[bucket] == null) {
+          counter[bucket] = [];
+        }
+        counter[bucket].push(array[j]);
+      }
+      let pos = 0;
+      for (let j = 0; j < counter.length; j++) {
+        let value = null;
+        if (counter[j] != null) {
+          while ((value = counter[j].shift()) != null) {
+            array[pos++] = value;
+          }
+        }
+      }
+    }
+    return array;
+  }
+  var test = ['a', 'aa', 'aa', 'ab', 'bbba', 'aba', 'abaa', 'aaa', 'aababa'];
+  console.log(sortLSD(test, 2));
 
   // BetterTable library objects
   BetterTableLibrary.Table = Table;
