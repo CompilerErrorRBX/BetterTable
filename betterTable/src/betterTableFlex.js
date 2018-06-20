@@ -468,6 +468,7 @@ const BetterTable = (function() {
       this.cells = {};
       this.index = index;
       this.data = data;
+      this.hovered = false;
       this.__processed = false;
     }
 
@@ -478,8 +479,26 @@ const BetterTable = (function() {
           for (let i = 0; i < this.table.__columnsOrdered.length; i++) {
             const cell = this.cells[this.table.__columnsOrdered[i]];
             cell.__render();
+            cell.$el.setAttribute('data-row', this.index);
+            cell.$el.setAttribute('data-row-odd', this.index % 2 === 1);
+            cell.$el.setAttribute('data-column-odd', i % 2 === 1);
+            cell.$el.setAttribute('data-column', i);
           }
         }
+      },
+      __hover: function() {
+        for (let i = 0; i < this.table.__columnsOrdered.length; i++) {
+          const cell = this.cells[this.table.__columnsOrdered[i]];
+          cell.$el.setAttribute('data-hovered', true);
+        }
+        this.hovered = true;
+      },
+      __unhover: function () {
+        for (let i = 0; i < this.table.__columnsOrdered.length; i++) {
+          const cell = this.cells[this.table.__columnsOrdered[i]];
+          cell.$el.setAttribute('data-hovered', false);
+        }
+        this.hovered = false;
       },
     };
 
@@ -516,6 +535,14 @@ const BetterTable = (function() {
           $cellEl.ondblclick = (function () {
             this.onDoubleClick.dispatch(this);
             this.row.table.onCellDoubleClick.dispatch(this);
+          }).bind(this);
+
+          $cellEl.onmouseover = (function () {
+            this.row.__hover();
+          }).bind(this);
+
+          $cellEl.onmouseout = (function () {
+            this.row.__unhover();
           }).bind(this);
 
           this.$el = $cellEl;

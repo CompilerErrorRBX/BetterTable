@@ -77,6 +77,14 @@
   white-space: nowrap;
 }
 
+.btf-cell[data-row-odd=true] {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+.btf-cell[data-hovered=true] {
+  background-color: rgba(0,0,0,0.1);
+}
+
 .btf-index-input {
   display: inline-flex;
   flex: 1 0 auto;
