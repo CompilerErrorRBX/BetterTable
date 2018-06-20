@@ -195,6 +195,7 @@ const BetterTable = (function() {
 
           for (let i = 0; i < this.__columnsOrdered.length; i++) {
             const columnName = this.__columnsOrdered[i];
+            row.cells[columnName].$el.setAttribute('data-hovered', false);
             containers[columnName].appendChild(row.cells[columnName].$el); // Append row cells to respective column fragments
           }
         }
