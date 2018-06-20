@@ -4,16 +4,17 @@ const BetterTable = (function() {
   const Table = (function btTable() {
     function Table(opts) {
       const defaults = {
-        columns: {},              // An object representing columns. { email: { name: 'Email', props: {} }, fname: { name: 'Email', props: {} }, lname: { name: 'Email', props: {} } }
-        rows: [],                 // An array of object key-value pairs representing rows of data. [{ email: 'someemail@gmail.com', fname: 'Bob', lname: 'Evans' }]
         appendTo: null,           // The element the table should be appended to. Defaults to body.
+        columns: {},              // An object representing columns. { email: { name: 'Email', props: {} }, fname: { name: 'Email', props: {} }, lname: { name: 'Email', props: {} } }
+        columnsDraggable: false,  // Toggles whether a column can be rearranged or not
+        customSortClass: '',      // Sets custom classes for the sort labels on column headers to allow using custom icon font libraries.
+        footer: true,             // Toggles the footer on the betterTable.
+        headerHeight: 32,         // Adjusts the height of the header row.
         maxDisplayRows: 50,       // The maximum number of rows to display at a time.
         rowHeight: 32,            // TODO: Make this adjust row size accordingly.
-        headerHeight: 32,         // Adjusts the height of the header row.
-        toolbar: true,            // Toggles the toolbar on the betterTable.
-        footer: true,             // Toggles the footer on the betterTable.
+        rows: [],                 // An array of object key-value pairs representing rows of data. [{ email: 'someemail@gmail.com', fname: 'Bob', lname: 'Evans' }]
         showRowIndex: true,       // Toggles the element showing current row index.
-        customSortClass: '',      // Sets custom classes for the sort labels on column headers to allow using custom icon font libraries.
+        toolbar: true,            // Toggles the toolbar on the betterTable.
         useNativeSorting: false,  // Toggles whether the table should handle sorting.
         // TODO: Handle max display columns as well
       };
@@ -349,6 +350,7 @@ const BetterTable = (function() {
         width: null,
         minWidth: null,
         order: 1,
+        sort: 'none',
       };
 
       this.settings = extend(defaults, data.props);
@@ -358,17 +360,22 @@ const BetterTable = (function() {
       this.data = data;
       this.id = id;
       this.cells = [];
+      this.dragging = false;
 
       this.__order = this.settings.order;
       this.__sort = 'none';
 
       this.onClick = new Event();
       this.onDoubleClick = new Event();
+      this.onDragStart = new Event();
+      this.onDragStop = new Event();
 
       this.$el = null;
       this.$headerEl = null;
 
       this.__init();
+
+      this.sort = this.settings.sort;
     }
 
     Column.prototype = {
@@ -411,6 +418,37 @@ const BetterTable = (function() {
           this.table.onColumnDoubleClick.dispatch(this);
         }).bind(this);
 
+        if (this.table.settings.columnsDraggable) {
+          let clicking = false;
+          let dragging = false;
+          let dragDebounce = null;
+
+          $headerEl.onmousedown = (function () {
+            clicking = true;
+            if (dragDebounce) {
+              clearTimeout(dragDebounce);
+            }
+
+            dragDebounce = setTimeout(function () {
+              if (clicking) {
+                dragging = true;
+              }
+            }, 50);
+          });
+
+          $headerEl.onmousemove = (function (e) {
+            if (dragging && clicking) {
+              clicking = false;
+              const $dragger = this.__drag(e);
+              this.onDragStart.dispatch([$dragger]);
+            }
+          }.bind(this));
+
+          $headerEl.onmouseup = (function () {
+            clicking = false;
+          });
+        }
+
         this.$el = $columnEl;
         this.$sortEl = $sortEl;
         this.$headerEl = $headerEl;
@@ -419,6 +457,33 @@ const BetterTable = (function() {
       },
       __render: function() {
 
+      },
+      __drag: function(e) {
+        const $dragger = this.$headerEl.cloneNode(true);
+        $dragger.className += ' drag-element';
+        document.body.appendChild($dragger);
+
+        const bounds = this.$headerEl.getBoundingClientRect();
+        const offsetX = bounds.top + window.scrollY;
+        const offsetY = bounds.left + window.scrollX;
+
+        $dragger.style.top = (e.clientY - offsetY) + 'px';
+        $dragger.style.left = (e.clientX - offsetX) + 'px';
+        $dragger.style.width = this.$headerEl.clientWidth + 'px';
+
+        document.onmousemove = (function(e) {
+          $dragger.focus();
+          $dragger.style.top = (e.clientY - offsetY) + 'px';
+          $dragger.style.left = (e.clientX - offsetX) + 'px';
+        });
+
+        document.onmouseup = (function () {
+          document.body.removeChild($dragger);
+          document.onmouseup = null;
+          document.onmousemove = null;
+        });
+
+        return $dragger;
       },
       toggleSort: function() {
         switch(this.__sort) {
@@ -481,8 +546,6 @@ const BetterTable = (function() {
             cell.__render();
             cell.$el.setAttribute('data-row', this.index);
             cell.$el.setAttribute('data-row-odd', this.index % 2 === 1);
-            cell.$el.setAttribute('data-column-odd', i % 2 === 1);
-            cell.$el.setAttribute('data-column', i);
           }
         }
       },

@@ -16,6 +16,10 @@ body, html {
   font-weight: bold;
 }
 
+.btf-header {
+  background-color: #42A5F5;
+}
+
 .btf-toolbar {
   background-color: #2196F3;
 }
