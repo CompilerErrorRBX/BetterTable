@@ -294,6 +294,20 @@ const BetterTable = (function() {
 
         this.__updateRows(rows);
       },
+      getSortedColumns: function() {
+        const columnKeys = Object.keys(this.columns);
+        const sortedColumns = {};
+
+        for (let i = 0; i < columnKeys.length; i++) {
+          var col = this.columns[columnKeys[i]];
+          const sort = col.sort;
+          if (sort !== 'none') {
+            sortedColumns[col.id] = sort;
+          }
+        }
+
+        return sortedColumns;
+      },
 
       // Getters and Setters.
       get rowData() {
