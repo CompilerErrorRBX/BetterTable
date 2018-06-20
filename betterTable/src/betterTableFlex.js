@@ -651,34 +651,6 @@ const BetterTable = (function() {
     arr[el2] = swapedElem;
   }
 
-  function sortLSD(array, maxDigitSymbols) {
-    const counter = [[]];
-
-    let mod = 256;
-    let dev = 1;
-    for (let i = 0; i < maxDigitSymbols; i++, dev *= 256, mod *= 256) {
-      for (let j = 0; j < array.length; j++) {
-        const bucket = parseInt((array[j] % mod) / dev);
-        if (counter[bucket] == null) {
-          counter[bucket] = [];
-        }
-        counter[bucket].push(array[j]);
-      }
-      let pos = 0;
-      for (let j = 0; j < counter.length; j++) {
-        let value = null;
-        if (counter[j] != null) {
-          while ((value = counter[j].shift()) != null) {
-            array[pos++] = value;
-          }
-        }
-      }
-    }
-    return array;
-  }
-  var test = ['a', 'aa', 'aa', 'ab', 'bbba', 'aba', 'abaa', 'aaa', 'aababa'];
-  console.log(sortLSD(test, 2));
-
   // BetterTable library objects
   BetterTableLibrary.Table = Table;
   BetterTableLibrary.Row = Row;
