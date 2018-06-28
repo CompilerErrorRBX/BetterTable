@@ -188,19 +188,20 @@ const BetterTable = (function() {
           containers[columnName] = document.createDocumentFragment();
         }
 
-        for (let i = scrollRowIndex - offset; i < rowRange; i++) { // Get all rows in view
+        for (i = scrollRowIndex - offset; i < rowRange; i++) { // Get all rows in view
           const index = this.__filteredRows ? this.__filteredRows[i] : i;
           const row = this.rows[index] || this.__processRow(index);
           row.__render();
 
-          for (let i = 0; i < this.__columnsOrdered.length; i++) {
-            const columnName = this.__columnsOrdered[i];
+          for (let j = 0; j < this.__columnsOrdered.length; j++) {
+            const columnName = this.__columnsOrdered[j];
             row.cells[columnName].$el.setAttribute('data-hovered', false);
+            row.cells[columnName].$el.setAttribute('data-row-odd', i % 2 === 1);
             containers[columnName].appendChild(row.cells[columnName].$el); // Append row cells to respective column fragments
           }
         }
 
-        for (let i = 0; i < this.__columnsOrdered.length; i++) {
+        for (i = 0; i < this.__columnsOrdered.length; i++) {
           const columnName = this.__columnsOrdered[i];
           const column = this.columns[columnName];
           column.$el.innerHTML = '';
@@ -341,8 +342,8 @@ const BetterTable = (function() {
         this.__filteredRows = this.rowData.reduce(function (rows, row, index) {
           const cells = Object.keys(row);
           for (let i = 0; i < cells.length; i++) {
-            if (row[cells[i]].toLowerCase().indexOf(filterStringLower) > -1) {
-              rows.push({ row: row, index: index });
+            if (('' + row[cells[i]]).toLowerCase().indexOf(filterStringLower) > -1) {
+              rows.push(index);
               break;
             }
           }
@@ -560,7 +561,7 @@ const BetterTable = (function() {
             const cell = this.cells[this.table.__columnsOrdered[i]];
             cell.__render();
             cell.$el.setAttribute('data-row', this.index);
-            cell.$el.setAttribute('data-row-odd', this.index % 2 === 1);
+            // cell.$el.setAttribute('data-row-odd', this.index % 2 === 1);
           }
         }
       },
