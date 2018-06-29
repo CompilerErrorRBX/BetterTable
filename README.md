@@ -271,8 +271,8 @@ _None._
 **.dispatch ( arguments : `Array` ) : `void`**<br/>
 Dispatches the event passing arbitrary arguments to all of the event's listeners.
 
-**.connect ( action : `function` ) : `Listener`**<br/>
-Creates a listener for this Event that will be activated when the Event is dispatched.
+**.connect ( action : `function` ) : [Listener](#listener)**<br/>
+Creates a [Listener](#listener) for this event that will be activated when the event is dispatched.
 
 #### Events
 _None._
@@ -283,9 +283,9 @@ ___
 _**NOTE:** This is included for reference only as this object is `Private`._
 
 #### Constructor
-**Listener ( action : `function`, event : `Event` )**
+**Listener ( action : `function`, event : [Event](#event) )**
 - `action` - The function to call when the Listener's event is dispatched.
-- `event` - The event to listen to.
+- `event` - The [Event](#event) to listen to.
 
 Creates a new instance of the _BetterTable_ Listener.
 
@@ -294,10 +294,10 @@ _None._
 
 #### Methods
 **.execute ( args : `Array` ) : `<Type>`**<br/>
-Executes this listener's actions and returns anything that the action returned. This function is called by the Event dispatcher.
+Executes this listener's actions and returns anything that the action returned. This function is called by the [Event](#event) dispatcher.
 
 **.disconnect ( ) : `void`**<br/>
-Disconnects this listener from its corresponding event.
+Disconnects this listener from its corresponding [Event](#event).
 
 #### Events
 _None._
