@@ -307,7 +307,7 @@ Creates a new instance of the _BetterTable_ Event.
 _None._
 
 #### Methods
-**.dispatch ( arguments : `...args` ) : `void`**
+**.dispatch ( arguments : `Array` ) : `void`**
 Dispatches the event passing arbitrary arguments to all of the event's listeners.
 
 **.connect ( action : `function` ) : `Listener`**
@@ -332,7 +332,7 @@ Creates a new instance of the _BetterTable_ Listener.
 _None._
 
 #### Methods
-**.execute ( args : `...args` ) : `<Type>`**
+**.execute ( args : `Array` ) : `<Type>`**
 Executes this listener's actions and returns anything that the action returned. This function is called by the Event dispatcher.
 
 **.disconnect ( ) : `void`**
