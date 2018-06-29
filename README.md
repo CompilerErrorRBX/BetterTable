@@ -42,7 +42,7 @@ ___
 ## [Table]()
 #### Constructor
 **Table ( options : `Object` )**
-`options` - an object containing configuration for the table properties. Must contain at least column settings.
+- `options` - an object containing configuration for the table properties. Must contain at least column settings.
 
 Creates a new instance of the BetterTable.
 
@@ -120,9 +120,9 @@ ___
 ## [Column]()
 #### Constructor
 **Column ( table : `Table`, id: `String`, data: `Object` )**
-`table` - The [Table](##Table) that this column is a part of.
-`id` - The id of the column.
-`data` - An object containing data for the column. 
+- `table` - The [Table](##Table) that this column is a part of.
+- `id` - The id of the column.
+- `data` - An object containing data for the column. 
 
 Creates a new instance of the BetterTable Column.
 
@@ -187,9 +187,9 @@ ___
 ## [Row]()
 #### Constructor
 **Row ( table : [Table](##Table), data: `Object`, index: `Integer` )**
-`table` - The [Table](##Table) that this row is a part of.
-`data` - An object containing data for the row. 
-`index` - The row's index in the table.
+- `table` - The [Table](##Table) that this row is a part of.
+- `data` - An object containing data for the row. 
+- `index` - The row's index in the table.
 
 Creates a new instance of the BetterTable Row.
 
@@ -225,9 +225,9 @@ ___
 ## [Cell]()
 #### Constructor
 **Cell ( row : [Row](##Row), column: [Column](##Column), value: `<Type>` )**
-`row` - The [Row](##Row) that this cell belongs to.
-`column` - The [Column](##Column) that this cell belongs to.
-`value` - The displayed value in the cell. This can be anything that can be displayed in HTML.
+- `row` - The [Row](##Row) that this cell belongs to.
+- `column` - The [Column](##Column) that this cell belongs to.
+- `value` - The displayed value in the cell. This can be anything that can be displayed in HTML.
 
 Creates a new instance of the _BetterTable_ Cell.
 
@@ -258,6 +258,7 @@ _**NOTE:** This is included for reference only as this object is `Private`._
 
 #### Constructor
 **Event ( )**
+
 Creates a new instance of the _BetterTable_ Event.
 
 #### Properties
@@ -280,8 +281,8 @@ _**NOTE:** This is included for reference only as this object is `Private`._
 
 #### Constructor
 **Listener ( action : `function`, event : `Event` )**
-`action` - The function to call when the Listener's event is dispatched.
-`event` - The event to listen to.
+- `action` - The function to call when the Listener's event is dispatched.
+- `event` - The event to listen to.
 
 Creates a new instance of the _BetterTable_ Listener.
 
