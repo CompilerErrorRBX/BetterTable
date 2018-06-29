@@ -68,7 +68,7 @@ The object containing the settings for the BetterTable.
 
 **.columns : `Object`**
 
-The object containing all generated [Column](Column) Objects.
+The object containing all generated [Column](#Column) Objects.
 
 **.columnData : `Object`**
 
