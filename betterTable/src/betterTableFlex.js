@@ -6,12 +6,12 @@ const BetterTable = (function() {
       const defaults = {
         appendTo: null,           // The element the table should be appended to. Defaults to body.
         columns: {},              // An object representing columns. { email: { name: 'Email', props: {} }, fname: { name: 'Email', props: {} }, lname: { name: 'Email', props: {} } }
-        columnsDraggable: false,  // Toggles whether a column can be rearranged or not
+        columnsDraggable: false,  // Toggles whether a column can be rearranged or not.
         customSortClass: '',      // Sets custom classes for the sort labels on column headers to allow using custom icon font libraries.
         footer: true,             // Toggles the footer on the betterTable.
-        headerHeight: 32,         // Adjusts the height of the header row.
+        headerHeight: 32,         // Sets the height of the header row in pixels.
         maxDisplayRows: 50,       // The maximum number of rows to display at a time.
-        rowHeight: 32,            // TODO: Make this adjust row size accordingly.
+        rowHeight: 32,            // Sets the height of the rows in pixels.
         rows: [],                 // An array of object key-value pairs representing rows of data. [{ email: 'someemail@gmail.com', fname: 'Bob', lname: 'Evans' }]
         showRowIndex: true,       // Toggles the element showing current row index.
         toolbar: true,            // Toggles the toolbar on the betterTable.
@@ -376,7 +376,6 @@ const BetterTable = (function() {
       this.data = data;
       this.id = id;
       this.cells = [];
-      this.dragging = false;
 
       this.__order = this.settings.order;
       this.__sort = 'none';
@@ -551,6 +550,9 @@ const BetterTable = (function() {
       this.data = data;
       this.hovered = false;
       this.__processed = false;
+
+      this.onMouseOver = new Event();
+      this.onMouseLeave = new Event();
     }
 
     Row.prototype = {
@@ -561,7 +563,6 @@ const BetterTable = (function() {
             const cell = this.cells[this.table.__columnsOrdered[i]];
             cell.__render();
             cell.$el.setAttribute('data-row', this.index);
-            // cell.$el.setAttribute('data-row-odd', this.index % 2 === 1);
           }
         }
       },
@@ -570,6 +571,8 @@ const BetterTable = (function() {
           const cell = this.cells[this.table.__columnsOrdered[i]];
           cell.$el.setAttribute('data-hovered', true);
         }
+
+        this.onMouseOver.dispatch();
         this.hovered = true;
       },
       __unhover: function () {
@@ -577,6 +580,8 @@ const BetterTable = (function() {
           const cell = this.cells[this.table.__columnsOrdered[i]];
           cell.$el.setAttribute('data-hovered', false);
         }
+
+        this.onMouseLeave.dispatch();
         this.hovered = false;
       },
     };
