@@ -244,6 +244,9 @@ The [Column](#column) that the cell belongs to.
 **.row : [Row](#row)**<br/>
 The [Row](#row) that the cell belongs to.
 
+**.$el : `<DOMElement>`**<br/>
+The element corresponding to this cell.
+
 #### Methods
 _None._
 
