@@ -164,7 +164,7 @@ The object containing the settings from `data.props` for the column.
 |width |`String`|`null`|CSS width setting for the column. Will be unset if null.|
 |minWidth |`String`|`null`|CSS min-width setting for the column. Will be unset if null.|
 |order |`Integer`|`1`|The order that the column is rendered in.|
-|sort |`ENUM`|`"none"`|The sort order for the column. Valid values are `["NONE", "ASC", "DESC"]`.|
+|sort |`ENUM`|`"NONE"`|The sort order for the column. Valid values are `["NONE", "ASC", "DESC"]`.|
 
 **.table : [Table](#table)**
 
