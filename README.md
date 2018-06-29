@@ -39,7 +39,7 @@ ___
 
 # BetterTable API
 
-## [Table]()
+## Table
 #### Constructor
 **Table ( options : `Object` )**
 - `options` - an object containing configuration for the table properties. Must contain at least column settings.
@@ -72,7 +72,7 @@ The object containing all generated [Column](#Column) Objects.
 
 **.columnData : `Object`**
 
-The data used to generate the [Column](##Column) Objects.
+The data used to generate the [Column](#Column) Objects.
 
 **.filter : `String`**
 
@@ -112,29 +112,29 @@ The columns container element.
 Retrieves the columns sorted as `asc` and `desc`.
 
 #### Events
-**.onCellClick : [Event](##Event)**
+**.onCellClick : [Event](#Event)**
 
 Fires when any cell is clicked.
 
-**.onCellDoubleClick : [Event](##Event)**
+**.onCellDoubleClick : [Event](#Event)**
 
 Fires when any cell is double clicked.
 
-**.onColumnClick : [Event](##Event)**
+**.onColumnClick : [Event](#Event)**
 
 Fires when any column header is clicked.
 
-**.onColumnDoubleClick : [Event](##Event)**
+**.onColumnDoubleClick : [Event](#Event)**
 
 Fires when any column header is double clicked.
 
-**.onRowsUpdate : [Event](##Event)**
+**.onRowsUpdate : [Event](#Event)**
 
 Fires when any update occurs to the rows.
 
 ___
 
-## [Column]()
+## Column
 #### Constructor
 **Column ( table : `Table`, id: `String`, data: `Object` )**
 - `table` - The [Table](##Table) that this column is a part of.
@@ -166,7 +166,7 @@ The object containing the settings from `data.props` for the column.
 |order |`Integer`|`1`|The order that the column is rendered in.|
 |sort |`ENUM`|`"none"`|The sort order for the column. Valid values are `["NONE", "ASC", "DESC"]`.|
 
-**.table : [Table](##Table)**
+**.table : [Table](#Table)**
 
 The table that the column is a part of.
 
@@ -204,20 +204,20 @@ The header element of this column.
 Toggles the columns sort direction from `NONE` to `ASC` to `DESC`.
 
 #### Events
-**.onClick : [Event](##Event)**
+**.onClick : [Event](#Event)**
 
 Fires when the column header is clicked.
 
-**.onDoubleClick : [Event](##Event)**
+**.onDoubleClick : [Event](#Event)**
 
 Fires when the column header is double clicked.
 
 ___
 
-## [Row]()
+## Row
 #### Constructor
-**Row ( table : [Table](##Table), data: `Object`, index: `Integer` )**
-- `table` - The [Table](##Table) that this row is a part of.
+**Row ( table : [Table](#Table), data: `Object`, index: `Integer` )**
+- `table` - The [Table](#Table) that this row is a part of.
 - `data` - An object containing data for the row. 
 - `index` - The row's index in the table.
 
@@ -228,9 +228,9 @@ Creates a new instance of the BetterTable Row.
 
 The object containing metadata about the row.
 
-**.table : [Table](##Table)**
+**.table : [Table](#Table)**
 
-The [Table](##Table) that the row belongs to.
+The [Table](#Table) that the row belongs to.
 
 **.cells : `Object`**
 
@@ -249,21 +249,21 @@ Due to the structure of the _BetterTable_, rows cannot use CSS hovering effects.
 _None._
 
 #### Events
-**.onMouseOver : [Event](##Event)**
+**.onMouseOver : [Event](#Event)**
 
 Fires when the mouse moves over the row.
 
-**.onMouseLeave : [Event](##Event)**
+**.onMouseLeave : [Event](#Event)**
 
 Fires when the mouse moves off of the row.
 
 ___
 
-## [Cell]()
+## Cell
 #### Constructor
-**Cell ( row : [Row](##Row), column: [Column](##Column), value: `<Type>` )**
-- `row` - The [Row](##Row) that this cell belongs to.
-- `column` - The [Column](##Column) that this cell belongs to.
+**Cell ( row : [Row](#Row), column: [Column](#Column), value: `<Type>` )**
+- `row` - The [Row](#Row) that this cell belongs to.
+- `column` - The [Column](#Column) that this cell belongs to.
 - `value` - The displayed value in the cell. This can be anything that can be displayed in HTML.
 
 Creates a new instance of the _BetterTable_ Cell.
@@ -273,29 +273,29 @@ Creates a new instance of the _BetterTable_ Cell.
 
 The displayed value in the cell's innerHTML.
 
-**.column : [Column](##Column)**
+**.column : [Column](#Column)**
 
-The [Column](##Column) that the cell belongs to.
+The [Column](#Column) that the cell belongs to.
 
-**.row : [Row](##Row)**
+**.row : [Row](#Row)**
 
-The [Row](##Row) that the cell belongs to.
+The [Row](#Row) that the cell belongs to.
 
 #### Methods
-None.
+_None._
 
 #### Events
-**.onClick : [Event](##Event)**
+**.onClick : [Event](#Event)**
 
 Fires when the cell is clicked.
 
-**.onDoubleClick : [Event](##Event)**
+**.onDoubleClick : [Event](#Event)**
 
 Fires when the cell is double clicked.
 
 ___
 
-## [Event]()
+## Event
 _**NOTE:** This is included for reference only as this object is `Private`._
 
 #### Constructor
@@ -318,7 +318,7 @@ _None._
 
 ___
 
-## [Listener]()
+## Listener
 _**NOTE:** This is included for reference only as this object is `Private`._
 
 #### Constructor
