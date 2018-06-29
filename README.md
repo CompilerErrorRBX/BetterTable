@@ -48,6 +48,7 @@ Creates a new instance of the BetterTable.
 
 #### Properties
 **.settings : `Object`**
+
 The object containing the settings for the BetterTable.
 
 |Property |Type          |Default        |Description|
@@ -66,53 +67,69 @@ The object containing the settings for the BetterTable.
 |useNativeSorting |`Boolean`|`false`|Toggles whether the table should handle sorting. **_NOTE:_** It is highly recommended to disable this as sorting is incomplete.|
 
 **.columns : `Object`**
+
 The object containing all generated [Column](##Column) Objects.
 
 **.columnData : `Object`**
+
 The data used to generate the [Column](##Column) Objects.
 
 **.filter : `String`**
+
 The string to filter the BetterTable rows on. Setting this value will filter the rows in the BetterTable.
 
 **.rows : `Array`**
+
 The list of all generated `Row` Objects.
 
 **.rowData : `Array`**
+
 The data used to generate the `Row` Objects. Setting this value will update the rows in the BetterTable.
 
 **.rowIndex : `Integer`**
+
 The current row the BetterTable is scrolled to. Setting this value will scroll the row with this index into view.
 
 **.$el : `<DOMElement>`**
+
 The BetterTable element.
 
 **.$bodyEl : `<DOMElement>`**
+
 The column rows container element.
 
 **.$headersEl : `<DOMElement>`**
+
 The headers container element.
 
 **.$columnsEl : `<DOMElement>`**
+
 The columns container element.
 
 #### Methods
 **.getSortedColumns ( ) : `Object`**
+
 Retrieves the columns sorted as `asc` and `desc`.
 
 #### Events
 **.onCellClick : [Event](##Event)**
+
 Fires when any cell is clicked.
 
 **.onCellDoubleClick : [Event](##Event)**
+
 Fires when any cell is double clicked.
 
 **.onColumnClick : [Event](##Event)**
+
 Fires when any column header is clicked.
 
 **.onColumnDoubleClick : [Event](##Event)**
+
 Fires when any column header is double clicked.
 
 **.onRowsUpdate : [Event](##Event)**
+
 Fires when any update occurs to the rows.
 
 ___
@@ -128,6 +145,7 @@ Creates a new instance of the BetterTable Column.
 
 #### Properties
 **.data : `Object`**
+
 The object containing the data for the column.
 
 |Property |Type          |Default        |Description|
@@ -136,6 +154,7 @@ The object containing the data for the column.
 |props |Required `Object`|`{}`|The property settings for this column.|
 
 **.settings : `Object`**
+
 The object containing the settings from `data.props` for the column.
 
 |Property |Type          |Default        |Description|
@@ -148,38 +167,49 @@ The object containing the settings from `data.props` for the column.
 |sort |`ENUM`|`"none"`|The sort order for the column. Valid values are `["NONE", "ASC", "DESC"]`.|
 
 **.table : [Table](##Table)**
+
 The table that the column is a part of.
 
 **.name : `String`**
+
 The displayed name of this column from `data.name`.
 
 **.id : `String`**
+
 The id string of this column.
 
 **.cells : `Array`**
+
 A list of cells belonging to this column.
 
 **.order : `Integer`**
+
 The order this column appears in the table.
 
 **.sort : `ENUM`**
+
 The sort direction of this column. Can also be used to set the sort direction of this column.
 
 **.$el : `<DOMElement>`**
+
 The column container element of this column.
 
 **.$headerEl : `<DOMElement>`**
+
 The header element of this column.
 
 #### Methods
 **.toggleSort ( ) : `Object`**
+
 Toggles the columns sort direction from `NONE` to `ASC` to `DESC`.
 
 #### Events
 **.onClick : [Event](##Event)**
+
 Fires when the column header is clicked.
 
 **.onDoubleClick : [Event](##Event)**
+
 Fires when the column header is double clicked.
 
 ___
@@ -195,19 +225,24 @@ Creates a new instance of the BetterTable Row.
 
 #### Properties
 **.data : `Object`**
+
 The object containing metadata about the row.
 
 **.table : [Table](##Table)**
+
 The [Table](##Table) that the row belongs to.
 
 **.cells : `Object`**
+
 The object containing Cells mapped to Columns.
 `{ columnId1: 'Some value', columnId2: 'Does not have to be a string.' }`
 
 **.index : `Integer`**
+
 The index of this row within the _BetterTable_.
 
 **.hovered : `Boolean`**
+
 Due to the structure of the _BetterTable_, rows cannot use CSS hovering effects. _BetterTable_ makes row hovering effects possible by exposing this property as well as a `data-hovered` attribute on this row's cells.
 
 #### Methods
@@ -215,9 +250,11 @@ _None._
 
 #### Events
 **.onMouseOver : [Event](##Event)**
+
 Fires when the mouse moves over the row.
 
 **.onMouseLeave : [Event](##Event)**
+
 Fires when the mouse moves off of the row.
 
 ___
@@ -233,12 +270,15 @@ Creates a new instance of the _BetterTable_ Cell.
 
 #### Properties
 **.value : `<Type>`**
+
 The displayed value in the cell's innerHTML.
 
 **.column : [Column](##Column)**
+
 The [Column](##Column) that the cell belongs to.
 
 **.row : [Row](##Row)**
+
 The [Row](##Row) that the cell belongs to.
 
 #### Methods
@@ -246,9 +286,11 @@ None.
 
 #### Events
 **.onClick : [Event](##Event)**
+
 Fires when the cell is clicked.
 
 **.onDoubleClick : [Event](##Event)**
+
 Fires when the cell is double clicked.
 
 ___
