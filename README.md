@@ -9,7 +9,7 @@ ___
 
 ## Getting started
 
-#### Initialization example:
+### Initialization example:
 ```js
 new BetterTable.Table({
   columns: {
@@ -40,13 +40,13 @@ ___
 # BetterTable API
 
 ## Table
-#### Constructor
+### Constructor
 **Table ( options : `Object` )**
 - `options` - an object containing configuration for the table properties. Must contain at least column settings.
 
 Creates a new instance of the _BetterTable_.
 
-#### Properties
+### Properties
 **.settings : `Object`**<br/>
 The object containing the settings for the _BetterTable_.
 
@@ -95,11 +95,11 @@ The headers container element.
 **.$columnsEl : `<DOMElement>`**<br/>
 The columns container element.
 
-#### Methods
+### Methods
 **.getSortedColumns ( ) : `Object`**<br/>
 Retrieves the columns sorted as `asc` and `desc`.
 
-#### Events
+### Events
 **.onCellClick : [Event](#event)**<br/>
 Fires when any cell is clicked.
 
@@ -118,7 +118,7 @@ Fires when any update occurs to the rows.
 ___
 
 ## Column
-#### Constructor
+### Constructor
 **Column ( table : `Table`, id: `String`, data: `Object` )**
 - `table` - The [Table](#table) that this column is a part of.
 - `id` - The id of the column.
@@ -126,7 +126,7 @@ ___
 
 Creates a new instance of the _BetterTable_ Column.
 
-#### Properties
+### Properties
 **.data : `Object`**<br/>
 The object containing the data for the column.
 
@@ -171,12 +171,12 @@ The column container element of this column.
 **.$headerEl : `<DOMElement>`**<br/>
 The header element of this column.
 
-#### Methods
+### Methods
 **.toggleSort ( ) : `Object`**
 
 Toggles the columns sort direction from `NONE` to `ASC` to `DESC`.
 
-#### Events
+### Events
 **.onClick : [Event](#event)**
 
 Fires when the column header is clicked.
@@ -188,7 +188,7 @@ Fires when the column header is double clicked.
 ___
 
 ## Row
-#### Constructor
+### Constructor
 **Row ( table : [Table](#table), data: `Object`, index: `Integer` )**
 - `table` - The [Table](#table) that this row is a part of.
 - `data` - An object containing data for the row. 
@@ -196,7 +196,7 @@ ___
 
 Creates a new instance of the _BetterTable_ Row.
 
-#### Properties
+### Properties
 **.data : `Object`**<br/>
 The object containing metadata about the row.
 
@@ -213,10 +213,10 @@ The index of this row within the _BetterTable_.
 **.hovered : `Boolean`**<br/>
 Due to the structure of the _BetterTable_, rows cannot use CSS hovering effects. _BetterTable_ makes row hovering effects possible by exposing this property as well as a `data-hovered` attribute on this row's cells.
 
-#### Methods
+### Methods
 _None._
 
-#### Events
+### Events
 **.onMouseOver : [Event](#event)**<br/>
 Fires when the mouse moves over the row.
 
@@ -226,7 +226,7 @@ Fires when the mouse moves off of the row.
 ___
 
 ## Cell
-#### Constructor
+### Constructor
 **Cell ( row : [Row](#row), column: [Column](#column), value: `<Type>` )**
 - `row` - The [Row](#row) that this cell belongs to.
 - `column` - The [Column](#column) that this cell belongs to.
@@ -234,7 +234,7 @@ ___
 
 Creates a new instance of the _BetterTable_ Cell.
 
-#### Properties
+### Properties
 **.value : `<Type>`**<br/>
 The displayed value in the cell's innerHTML.
 
@@ -247,10 +247,10 @@ The [Row](#row) that the cell belongs to.
 **.$el : `<DOMElement>`**<br/>
 The element corresponding to this cell.
 
-#### Methods
+### Methods
 _None._
 
-#### Events
+### Events
 **.onClick : [Event](#event)**<br/>
 Fires when the cell is clicked.
 
@@ -262,22 +262,22 @@ ___
 ## Event
 _**NOTE:** This is included for reference only as this object is `Private`._
 
-#### Constructor
+### Constructor
 **Event ( )**
 
 Creates a new instance of the _BetterTable_ Event.
 
-#### Properties
+### Properties
 _None._
 
-#### Methods
+### Methods
 **.dispatch ( arguments : `Array` ) : `void`**<br/>
 Dispatches the event passing arbitrary arguments to all of the event's listeners.
 
 **.connect ( action : `function` ) : [Listener](#listener)**<br/>
 Creates a [Listener](#listener) for this event that will be activated when the event is dispatched.
 
-#### Events
+### Events
 _None._
 
 ___
@@ -285,24 +285,24 @@ ___
 ## Listener
 _**NOTE:** This is included for reference only as this object is `Private`._
 
-#### Constructor
+### Constructor
 **Listener ( action : `function`, event : [Event](#event) )**
 - `action` - The function to call when the Listener's event is dispatched.
 - `event` - The [Event](#event) to listen to.
 
 Creates a new instance of the _BetterTable_ Listener.
 
-#### Properties
+### Properties
 _None._
 
-#### Methods
+### Methods
 **.execute ( args : `Array` ) : `<Type>`**<br/>
 Executes this listener's actions and returns anything that the action returned. This function is called by the [Event](#event) dispatcher.
 
 **.disconnect ( ) : `void`**<br/>
 Disconnects this listener from its corresponding [Event](#event).
 
-#### Events
+### Events
 _None._
 
 ___
