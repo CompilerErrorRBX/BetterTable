@@ -37,7 +37,7 @@ new BetterTable.Table({
 
 ___
 
-## BetterTable API
+# BetterTable API
 
 ## [Table]()
 #### Constructor
@@ -301,10 +301,10 @@ _None._
 
 ___
 
-## Dependencies
+# Dependencies
 _None._
 
-## Browser support
+# Browser support
 
 |Chrome|Firefox|IE|Edge|Safari|
 |------|-------|--|----|------|
