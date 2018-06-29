@@ -44,12 +44,12 @@ ___
 **Table ( options : `Object` )**
 - `options` - an object containing configuration for the table properties. Must contain at least column settings.
 
-Creates a new instance of the BetterTable.
+Creates a new instance of the _BetterTable_.
 
 #### Properties
 **.settings : `Object`**
 
-The object containing the settings for the BetterTable.
+The object containing the settings for the _BetterTable_.
 
 |Property |Type          |Default        |Description|
 |---------|--------------|---------------|-----------|
@@ -57,13 +57,13 @@ The object containing the settings for the BetterTable.
 |columns  |`Object`      |`{}`           |An object representing columns.|
 |columnsDraggable |`Boolean`|`false`|Toggles whether a column can be rearranged or not.|
 |customSortClass |`String`|`null`|Sets custom classes for the sort labels on column headers to allow using custom icon font libraries.|
-|footer |`Boolean`|`true`|Toggles the footer on the betterTable.|
+|footer |`Boolean`|`true`|Toggles the footer on the _BetterTable_.|
 |headerHeight |`Integer`|`32`|Sets the height of the header row in pixels.|
 |maxDisplayRows |`Integer`|`50`|The maximum number of rows to display at a time.|
 |rowHeight |`Integer`|`32`|Sets the height of the rows in pixels.|
 |rows |`Array`|`[]`|An array of object key-value pairs representing rows of data.|
 |showRowIndex |`Boolean`|`true`|Toggles the element showing current row index.|
-|toolbar |`Boolean`|`true`|Toggles the toolbar on the betterTable.|
+|toolbar |`Boolean`|`true`|Toggles the toolbar on the _BetterTable_.|
 |useNativeSorting |`Boolean`|`false`|Toggles whether the table should handle sorting. **_NOTE:_** It is highly recommended to disable this as sorting is incomplete.|
 
 **.columns : `Object`**
@@ -76,7 +76,7 @@ The data used to generate the [Column](#column) Objects.
 
 **.filter : `String`**
 
-The string to filter the BetterTable rows on. Setting this value will filter the rows in the BetterTable.
+The string to filter the _BetterTable_ rows on. Setting this value will filter the rows in the _BetterTable_.
 
 **.rows : `Array`**
 
@@ -84,15 +84,15 @@ The list of all generated `Row` Objects.
 
 **.rowData : `Array`**
 
-The data used to generate the `Row` Objects. Setting this value will update the rows in the BetterTable.
+The data used to generate the `Row` Objects. Setting this value will update the rows in the _BetterTable_.
 
 **.rowIndex : `Integer`**
 
-The current row the BetterTable is scrolled to. Setting this value will scroll the row with this index into view.
+The current row the _BetterTable_ is scrolled to. Setting this value will scroll the row with this index into view.
 
 **.$el : `<DOMElement>`**
 
-The BetterTable element.
+The _BetterTable_ element.
 
 **.$bodyEl : `<DOMElement>`**
 
@@ -141,7 +141,7 @@ ___
 - `id` - The id of the column.
 - `data` - An object containing data for the column. 
 
-Creates a new instance of the BetterTable Column.
+Creates a new instance of the _BetterTable_ Column.
 
 #### Properties
 **.data : `Object`**
@@ -221,7 +221,7 @@ ___
 - `data` - An object containing data for the row. 
 - `index` - The row's index in the table.
 
-Creates a new instance of the BetterTable Row.
+Creates a new instance of the _BetterTable_ Row.
 
 #### Properties
 **.data : `Object`**
