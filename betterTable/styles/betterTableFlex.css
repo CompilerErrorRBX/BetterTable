@@ -67,7 +67,6 @@
 .btf-cell {
   align-items: center;
   box-sizing: border-box;
-  display: flex;
   line-height: 32px;
   max-height: 32px;
   min-height: 32px;
@@ -75,6 +74,8 @@
   padding: 0 8px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  vertical-align: middle;
+  text-align: left;
 }
 
 .btf-cell[data-row-odd=true] {
